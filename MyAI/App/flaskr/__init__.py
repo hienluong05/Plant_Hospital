@@ -12,6 +12,7 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 from flask_socketio import SocketIO
 from . import chat
+from flask import session
 
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
@@ -77,6 +78,12 @@ def create_app():
     # Khởi tạo database
     from . import db
     db.init_app(app)
+
+    with app.app_context():
+        db_path = app.config['DATABASE']
+        if not os.path.exists(db_path):
+            print("Database chưa tồn tại, tự động khởi tạo từ schema.sql...")
+            db.init_db()
     
     # Đăng ký blueprint auth
     from . import auth
@@ -213,6 +220,8 @@ def create_app():
         return render_template('contact.html')
 
     return app
+
+
 
 # Cho phép chạy trực tiếp bằng python flaskr/__init__.py
 # if __name__ == '__main__':

@@ -64,6 +64,7 @@ CREATE TABLE experts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
+  password TEXT NOT NULL,  -- thêm dòng này!
   phone TEXT,
   specialties TEXT,
   bio TEXT,
@@ -72,7 +73,6 @@ CREATE TABLE experts (
   active BOOLEAN DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 -- Insert sample experts
-INSERT INTO experts (name, email, phone) 
-VALUES ('Dr. Victoria Lewis', 'ms.victorialewis@gmail.com', '0901234567');
+INSERT INTO experts (name, email, password, phone) 
+VALUES ('Dr. Victoria Lewis', 'ms.victorialewis@gmail.com', '123456', '0901234567');

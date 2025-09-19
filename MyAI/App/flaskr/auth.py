@@ -73,6 +73,24 @@ def login():
 
     return render_template('auth/login.html', success=success_message)
 
+@bp.route('/login-expert', methods=['GET', 'POST'])
+def login_expert():
+    error = None
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        db = get_db()
+        expert = db.execute('SELECT * FROM experts WHERE email = ?', (email,)).fetchone()
+        if expert is None or password != '123456':
+            error = 'Email hoặc mật khẩu không đúng'
+        else:
+            session.clear()
+            session['expert_id'] = expert['id']
+            session['is_expert'] = True
+            session['username'] = expert['name']
+            return redirect(url_for('expert_chat'))
+    return render_template('auth/expert_login.html', error=error)  # Đúng với tên file template
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
