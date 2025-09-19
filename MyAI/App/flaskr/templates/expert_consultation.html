@@ -497,6 +497,75 @@
       }
     </style>
   </head>
+
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script>
+    let socket = null;
+
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+      if (modalId === "chatModal") {
+        if (!socket) {
+          // Kết nối socket khi mở chat lần đầu
+          socket = io();
+          socket.on("connect", function () {
+            socket.emit("join_chat");
+          });
+          socket.on("chat_history", function (messages) {
+            const container = document.getElementById("chatContainer");
+            container.innerHTML = "";
+            messages.forEach((msg) => displayMessage(msg));
+            scrollToBottom();
+          });
+          socket.on("receive_message", function (msg) {
+            displayMessage(msg);
+            scrollToBottom();
+          });
+        }
+      }
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+    function sendMessage() {
+      const input = document.getElementById("chatInput");
+      const message = input.value.trim();
+      if (message && socket) {
+        socket.emit("send_message", { message: message });
+        input.value = "";
+      }
+    }
+    function displayMessage(data) {
+      const container = document.getElementById("chatContainer");
+      const div = document.createElement("div");
+      div.innerHTML = `<b>${data.user_name}:</b> ${data.message}`;
+      div.style.marginBottom = "10px";
+      div.style.background = data.is_expert ? "#d1e7dd" : "#fff";
+      div.style.padding = "6px 10px";
+      div.style.borderRadius = "7px";
+      container.appendChild(div);
+    }
+    function scrollToBottom() {
+      const container = document.getElementById("chatContainer");
+      container.scrollTop = container.scrollHeight;
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatInput = document.getElementById("chatInput");
+      if (chatInput) {
+        chatInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") sendMessage();
+        });
+      }
+    });
+  </script>
+
+  <!-- Chat Widget -->
+  <div class="chat-widget">
+    <div class="chat-button" onclick="openModal('chatModal')">
+      <i class="fas fa-comments"></i>
+    </div>
+  </div>
+
   <body>
     <!-- Top Contact Bar -->
     <div class="top-contact-bar">
@@ -779,186 +848,38 @@
       </div>
     </div>
 
-    <!-- Chat Modal -->
+    <!-- Chat Modal (đặt trong <body>, sau các section) -->
     <div id="chatModal" class="modal">
-      <div class="modal-content">
+      <div class="modal-content" style="max-width: 500px">
         <span class="close" onclick="closeModal('chatModal')">&times;</span>
         <h2>Chat với chuyên gia</h2>
-        <p>Để bắt đầu chat trực tiếp, vui lòng thanh toán phí dịch vụ.</p>
-        <form id="chatForm">
-          <div class="form-group">
-            <label for="chat_name">Họ và tên *</label>
-            <input type="text" id="chat_name" name="chat_name" required />
-          </div>
-          <div class="form-group">
-            <label for="chat_email">Email *</label>
-            <input type="email" id="chat_email" name="chat_email" required />
-          </div>
-          <div class="form-group">
-            <label for="chat_duration">Thời gian chat</label>
-            <select id="chat_duration" name="chat_duration">
-              <option value="30">30 phút - 50.000đ</option>
-              <option value="60">60 phút - 90.000đ</option>
-            </select>
-          </div>
+        <div
+          id="chatContainer"
+          style="
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f8f9fa;
+          "
+        ></div>
+        <div style="display: flex; margin-top: 10px">
+          <input
+            id="chatInput"
+            type="text"
+            class="form-control"
+            placeholder="Nhập tin nhắn..."
+            style="flex: 1"
+          />
           <button
-            type="button"
-            class="btn-primary"
-            style="width: 100%"
-            onclick="startChat()"
+            onclick="sendMessage()"
+            class="btn btn-success"
+            style="margin-left: 5px"
           >
-            Thanh toán và bắt đầu
+            Gửi
           </button>
-        </form>
+        </div>
       </div>
     </div>
-
-    <!-- Visit Modal -->
-    <div id="visitModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal('visitModal')">&times;</span>
-        <h2>Đặt lịch tư vấn tại nhà</h2>
-        <form id="visitForm" action="{{ url_for('book_visit') }}" method="POST">
-          <div class="form-group">
-            <label for="visit_name">Họ và tên *</label>
-            <input type="text" id="visit_name" name="visit_name" required />
-          </div>
-          <div class="form-group">
-            <label for="visit_email">Email *</label>
-            <input type="email" id="visit_email" name="visit_email" required />
-          </div>
-          <div class="form-group">
-            <label for="visit_phone">Số điện thoại *</label>
-            <input type="tel" id="visit_phone" name="visit_phone" required />
-          </div>
-          <div class="form-group">
-            <label for="visit_address">Địa chỉ *</label>
-            <textarea
-              id="visit_address"
-              name="visit_address"
-              required
-              placeholder="Địa chỉ chi tiết để chuyên gia đến tư vấn"
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label for="visit_date">Ngày mong muốn *</label>
-            <input type="date" id="visit_date" name="visit_date" required />
-          </div>
-          <div class="form-group">
-            <label for="visit_time">Khung giờ</label>
-            <select id="visit_time" name="visit_time">
-              <option value="morning">Sáng (8:00 - 12:00)</option>
-              <option value="afternoon">Chiều (13:00 - 17:00)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="garden_size">Quy mô vườn</label>
-            <select id="garden_size" name="garden_size">
-              <option value="small">Nhỏ (< 100m²)</option>
-              <option value="medium">Trung bình (100-500m²)</option>
-              <option value="large">Lớn (> 500m²)</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-primary" style="width: 100%">
-            Đặt lịch hẹn
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-      <div class="chat-button" onclick="openChat()">
-        <i class="fas fa-comments"></i>
-      </div>
-    </div>
-
-    <script>
-      // Modal functions
-      function openModal(modalId) {
-        document.getElementById(modalId).style.display = "block";
-      }
-
-      function closeModal(modalId) {
-        document.getElementById(modalId).style.display = "none";
-      }
-
-      // Close modal when clicking outside
-      window.onclick = function (event) {
-        const modals = document.querySelectorAll(".modal");
-        modals.forEach((modal) => {
-          if (event.target === modal) {
-            modal.style.display = "none";
-          }
-        });
-      };
-
-      // Chat functions
-      function openChat() {
-        // Mở Tawk.to chat widget
-        if (typeof Tawk_API !== "undefined") {
-          Tawk_API.toggle();
-        } else {
-          openModal("chatModal");
-        }
-      }
-
-      function startChat() {
-        alert(
-          "Chức năng thanh toán đang được phát triển. Vui lòng liên hệ hotline để được hỗ trợ."
-        );
-      }
-
-      // Smooth scrolling
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({
-              behavior: "smooth",
-            });
-          }
-        });
-      });
-
-      // Form submissions
-      document
-        .getElementById("questionForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          // Add your form submission logic here
-          alert(
-            "Câu hỏi đã được gửi thành công! Chúng tôi sẽ phản hồi trong vòng 24-48h."
-          );
-          closeModal("questionModal");
-        });
-
-      document
-        .getElementById("visitForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          // Add your form submission logic here
-          alert(
-            "Đặt lịch thành công! Chúng tôi sẽ liên hệ xác nhận trong thời gian sớm nhất."
-          );
-          closeModal("visitModal");
-        });
-    </script>
-
-    <!-- Tawk.to Chat Integration -->
-    <script type="text/javascript">
-      var Tawk_API = Tawk_API || {},
-        Tawk_LoadStart = new Date();
-      (function () {
-        var s1 = document.createElement("script"),
-          s0 = document.getElementsByTagName("script")[0];
-        s1.async = true;
-        s1.src = "https://embed.tawk.to/YOUR_TAWK_ID/YOUR_WIDGET_ID";
-        s1.charset = "UTF-8";
-        s1.setAttribute("crossorigin", "*");
-        s0.parentNode.insertBefore(s1, s0);
-      })();
-    </script>
   </body>
 </html>

@@ -10,6 +10,9 @@ import numpy as np
 import os
 from torchvision.models import resnet50, ResNet50_Weights
 
+from flask_socketio import SocketIO
+from . import chat
+
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
     class_names.sort()
@@ -82,6 +85,8 @@ def create_app():
     # Helper function để get database
     def get_db():
         return db.get_db()
+    
+    chat.init_socketio(app) 
 
     # Route cho trang chủ (không cần đăng nhập)
     @app.route('/')
@@ -210,6 +215,11 @@ def create_app():
     return app
 
 # Cho phép chạy trực tiếp bằng python flaskr/__init__.py
+# if __name__ == '__main__':
+#     app = create_app()
+#     app.run(debug=True)
+
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+    from .chat import socketio
+    socketio.run(app, debug=True)
