@@ -2,3 +2,7 @@ project-env/
 .venv/
 **/.venv/
 *.pt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
