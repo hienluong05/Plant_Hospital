@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plant Pharmacy - Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fecfef 50%,
+          #fecfef 100%
+        );
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      .header {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo h1 {
+        color: #ff9800;
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .main-nav ul {
+        display: flex;
+        list-style: none;
+        align-items: center;
+      }
+
+      .main-nav li {
+        margin: 0 20px;
+      }
+
+      .main-nav a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .main-nav a:hover,
+      .main-nav a.active {
+        color: #ff9800;
+      }
+
+      .back-btn {
+        background-color: #ff9800;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 20px;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .back-btn:hover {
+        background-color: #e68900;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 60px 0;
+      }
+
+      .page-title {
+        text-align: center;
+        color: white;
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+
+      .page-subtitle {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        margin-bottom: 60px;
+      }
+
+      /* Search Section */
+      .search-section {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 15px 20px;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #ff9800;
+      }
+
+      .search-btn {
+        background-color: #ff9800;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .search-btn:hover {
+        background-color: #e68900;
+      }
+
+      /* Category Filters */
+      .category-filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .filter-btn {
+        padding: 8px 20px;
+        border: 2px solid #ff9800;
+        background: white;
+        color: #ff9800;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background-color: #ff9800;
+        color: white;
+      }
+
+      /* Products Grid */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-icon {
+        font-size: 3rem;
+        color: #ff9800;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .product-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .product-category {
+        color: #666;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+      }
+
+      .product-description {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .product-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ff9800;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-primary {
+        flex: 1;
+        background-color: #ff9800;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-primary:hover {
+        background-color: #e68900;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #ff9800;
+        border: 2px solid #ff9800;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-secondary:hover {
+        background-color: #ff9800;
+        color: white;
+      }
+
+      /* Info Sections */
+      .info-section {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+      }
+
+      .info-title {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+
+      .info-item {
+        text-align: center;
+      }
+
+      .info-icon {
+        font-size: 2.5rem;
+        color: #ff9800;
+        margin-bottom: 15px;
+      }
+
+      .info-item h3 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .info-item p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .page-title {
+          font-size: 2.5rem;
+        }
+
+        .search-bar {
+          flex-direction: column;
+        }
+
+        .category-filters {
+          justify-content: flex-start;
+        }
+
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>Plant Hospital</h1>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('ai_diagnosis') }}">AI Diagnosis</a></li>
+            <li>
+              <a href="{{ url_for('pharmacy') }}" class="active">Pharmacy</a>
+            </li>
+            <li>
+              <a href="{{ url_for('expert_consultation') }}"
+                >Expert Consultation</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="header-cta">
+          <a href="{{ url_for('home') }}" class="back-btn"
+            ><i class="fas fa-arrow-left"></i> Back to Home</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <h1 class="page-title">Plant Pharmacy</h1>
+        <p class="page-subtitle">
+          Professional treatments and medications for your plant diseases
+        </p>
+
+        <!-- Search Section -->
+        <div class="search-section">
+          <div class="search-bar">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search for treatments, diseases, or products..."
+            />
+            <button class="search-btn">
+              <i class="fas fa-search"></i> Search
+            </button>
+          </div>
+          <div class="category-filters">
+            <a href="#" class="filter-btn active">All Products</a>
+            <a href="#" class="filter-btn">Fungicides</a>
+            <a href="#" class="filter-btn">Pesticides</a>
+            <a href="#" class="filter-btn">Fertilizers</a>
+            <a href="#" class="filter-btn">Organic Solutions</a>
+            <a href="#" class="filter-btn">Growth Enhancers</a>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid">
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="product-name">FungiFight Pro</h3>
+            <p class="product-category">Systemic Fungicide</p>
+            <p class="product-description">
+              Advanced fungicide for treating leaf spot, blight, and rust
+              diseases. Provides both preventive and curative action.
+            </p>
+            <div class="product-price">$24.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-bug"></i>
+            </div>
+            <h3 class="product-name">BugBuster Organic</h3>
+            <p class="product-category">Organic Insecticide</p>
+            <p class="product-description">
+              Eco-friendly solution for aphids, whiteflies, and spider mites.
+              Safe for beneficial insects and the environment.
+            </p>
+            <div class="product-price">$18.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h3 class="product-name">VitalGrow Plus</h3>
+            <p class="product-category">Growth Enhancer</p>
+            <p class="product-description">
+              Comprehensive nutrient solution that boosts plant immunity and
+              promotes healthy growth and recovery.
+            </p>
+            <div class="product-price">$32.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3 class="product-name">CopperShield</h3>
+            <p class="product-category">Copper-based Fungicide</p>
+            <p class="product-description">
+              Traditional copper-based treatment for bacterial diseases and
+              fungal infections. Suitable for organic farming.
+            </p>
+            <div class="product-price">$21.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+            <h3 class="product-name">NutriFeed Complete</h3>
+            <p class="product-category">Liquid Fertilizer</p>
+            <p class="product-description">
+              Balanced liquid fertilizer with micronutrients. Helps plants
+              recover from disease stress and builds resistance.
+            </p>
+            <div class="product-price">$28.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="product-icon">
+              <i class="fas fa-microscope"></i>
+            </div>
+            <h3 class="product-name">BioControl Kit</h3>
+            <p class="product-category">Biological Control</p>
+            <p class="product-description">
+              Beneficial microorganisms that naturally suppress plant diseases
+              and improve soil health.
+            </p>
+            <div class="product-price">$45.99</div>
+            <div class="product-actions">
+              <button class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+              <button class="btn-secondary">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="info-section">
+          <h2 class="info-title">Why Choose Our Pharmacy?</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-certificate"></i>
+              </div>
+              <h3>Certified Products</h3>
+              <p>
+                All our products are certified and tested for effectiveness and
+                safety in plant treatment.
+              </p>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-shipping-fast"></i>
+              </div>
+              <h3>Fast Delivery</h3>
+              <p>
+                Quick and reliable delivery to get treatments to your plants
+                when they need them most.
+              </p>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <h3>Expert Support</h3>
+              <p>
+                Our plant health experts are available to help you choose the
+                right treatment for your plants.
+              </p>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-undo-alt"></i>
+              </div>
+              <h3>Money-Back Guarantee</h3>
+              <p>
+                If you're not satisfied with the results, we offer a full refund
+                within 30 days.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

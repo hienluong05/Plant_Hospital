@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat với Chuyên gia - Plant Disease Detection</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .chat-container {
+        height: 500px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 15px;
+        background-color: #f8f9fa;
+      }
+      .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 70%;
+      }
+      .user-message {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+      }
+      .expert-message {
+        background-color: #28a745;
+        color: white;
+      }
+      .other-message {
+        background-color: #e9ecef;
+        color: #333;
+      }
+      .message img {
+        max-width: 200px;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      .timestamp {
+        font-size: 0.8em;
+        opacity: 0.7;
+        margin-top: 5px;
+      }
+      .online-indicator {
+        width: 10px;
+        height: 10px;
+        background-color: #28a745;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h4>
+                <span class="online-indicator"></span>Chat với Chuyên gia Plant
+                Disease
+              </h4>
+              <small>Hỏi về bệnh cây, gửi ảnh để được tư vấn</small>
+            </div>
+            <div class="card-body">
+              <div id="chatContainer" class="chat-container mb-3"></div>
+
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  id="messageInput"
+                  class="form-control"
+                  placeholder="Nhập tin nhắn..."
+                  onkeypress="handleKeyPress(event)"
+                />
+                <button class="btn btn-primary" onclick="sendMessage()">
+                  Gửi
+                </button>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <input
+                    type="file"
+                    id="imageInput"
+                    class="form-control"
+                    accept="image/*"
+                    onchange="previewImage(this)"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-success" onclick="sendImage()">
+                    Gửi ảnh
+                  </button>
+                </div>
+              </div>
+
+              <div id="imagePreview" class="mt-3"></div>
+            </div>
+          </div>
+
+          <div class="text-center mt-3">
+            <a href="/" class="btn btn-secondary">Quay lại trang chủ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script>
+      const socket = io();
+      let selectedImage = null;
+
+      socket.on("connect", function () {
+        console.log("Connected to server");
+        socket.emit("join_chat");
+      });
+
+      socket.on("chat_history", function (messages) {
+        const container = document.getElementById("chatContainer");
+        container.innerHTML = "";
+        messages.forEach((msg) => {
+          displayMessage(msg);
+        });
+        scrollToBottom();
+      });
+
+      socket.on("receive_message", function (data) {
+        displayMessage(data);
+        scrollToBottom();
+      });
+
+      socket.on("receive_image", function (data) {
+        displayMessage(data);
+        scrollToBottom();
+      });
+
+      function displayMessage(data) {
+        const container = document.getElementById("chatContainer");
+        const messageDiv = document.createElement("div");
+
+        let messageClass = "other-message";
+        if (data.is_expert) {
+          messageClass = "expert-message";
+        }
+
+        messageDiv.className = `message ${messageClass}`;
+
+        let html = `<strong>${data.user_name}:</strong>`;
+        if (data.message) {
+          html += `<div>${data.message}</div>`;
+        }
+        if (data.image_path) {
+          html += `<img src="/static/${data.image_path}" alt="Shared image" class="img-fluid">`;
+        }
+        html += `<div class="timestamp">${data.timestamp}</div>`;
+
+        messageDiv.innerHTML = html;
+        container.appendChild(messageDiv);
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("messageInput");
+        const message = input.value.trim();
+
+        if (message) {
+          socket.emit("send_message", { message: message });
+          input.value = "";
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      }
+
+      function previewImage(input) {
+        const preview = document.getElementById("imagePreview");
+
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            selectedImage = e.target.result;
+            preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview" style="max-width: 200px; border-radius: 5px;">
+                        <p class="text-muted mt-2">Ảnh đã chọn - nhấn "Gửi ảnh" để gửi</p>
+                    `;
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      function sendImage() {
+        if (selectedImage) {
+          const messageInput = document.getElementById("messageInput");
+          const message = messageInput.value.trim();
+
+          socket.emit("send_image", {
+            image: selectedImage,
+            message: message,
+          });
+
+          // Clear inputs
+          document.getElementById("imageInput").value = "";
+          messageInput.value = "";
+          document.getElementById("imagePreview").innerHTML = "";
+          selectedImage = null;
+        } else {
+          alert("Vui lòng chọn ảnh trước khi gửi!");
+        }
+      }
+
+      function scrollToBottom() {
+        const container = document.getElementById("chatContainer");
+        container.scrollTop = container.scrollHeight;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tư vấn chuyên gia - Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      /* Top Contact Bar */
+      .top-contact-bar {
+        background-color: #333333;
+        color: white;
+        padding: 10px 0;
+        font-size: 14px;
+      }
+
+      .top-contact-bar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .contact-info {
+        display: flex;
+        gap: 30px;
+      }
+
+      .social-links a {
+        color: white;
+        margin-left: 15px;
+        text-decoration: none;
+      }
+
+      /* Header */
+      .header {
+        background-color: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .logo h1 {
+        color: #4caf50;
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+
+      .main-nav ul {
+        display: flex;
+        list-style: none;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .main-nav a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .main-nav a:hover,
+      .main-nav a.active {
+        color: #4caf50;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        background: url("/static/expert-bg.jpg") center center/cover no-repeat;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        color: white; /* Nếu chữ khó nhìn trên ảnh, cân nhắc đổi màu hoặc thêm viền chữ */
+        position: relative;
+      }
+
+      .hero-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+      }
+
+      .hero-text h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      .hero-text p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 20px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #45a049;
+      }
+
+      .btn-secondary {
+        background-color: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-secondary:hover {
+        background-color: white;
+        color: #333;
+      }
+
+      .hero-image {
+        text-align: center;
+      }
+
+      .play-button {
+        width: 80px;
+        height: 80px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .play-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
+      .play-button i {
+        font-size: 2rem;
+        color: white;
+        margin-left: 5px;
+      }
+
+      /* Features Section */
+      .features-section {
+        background-color: #4caf50;
+        padding: 60px 0;
+        color: white;
+      }
+
+      .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+      }
+
+      .feature-card {
+        text-align: center;
+        padding: 30px;
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+      }
+
+      .feature-card p {
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      /* Services Section */
+      .services-section {
+        padding: 80px 0;
+        background-color: #f8f9fa;
+      }
+
+      .services-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 60px;
+        font-size: 1.1rem;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+      }
+
+      .service-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .service-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .service-icon {
+        font-size: 3.5rem;
+        color: #4caf50;
+        margin-bottom: 25px;
+      }
+
+      .service-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .service-description {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .service-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #4caf50;
+        margin-bottom: 25px;
+      }
+
+      .service-features {
+        list-style: none;
+        margin-bottom: 30px;
+      }
+
+      .service-features li {
+        padding: 5px 0;
+        color: #666;
+      }
+
+      .service-features li i {
+        color: #4caf50;
+        margin-right: 10px;
+      }
+
+      .service-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+      }
+
+      .service-btn:hover {
+        background-color: #45a049;
+      }
+
+      /* How It Works Section */
+      .how-it-works {
+        padding: 80px 0;
+        background: white;
+      }
+
+      .steps-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+      }
+
+      .step-card {
+        text-align: center;
+        position: relative;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 20px;
+      }
+
+      .step-card h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .step-card p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: #000;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #4caf50;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      /* Chat Widget */
+      .chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      .chat-button {
+        width: 60px;
+        height: 60px;
+        background-color: #4caf50;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s;
+      }
+
+      .chat-button:hover {
+        background-color: #45a049;
+        transform: scale(1.1);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero-content {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+
+        .hero-text h1 {
+          font-size: 2.5rem;
+        }
+
+        .features-container {
+          grid-template-columns: 1fr;
+        }
+
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Contact Bar -->
+    <div class="top-contact-bar">
+      <div class="container">
+        <div class="contact-info">
+          <span><i class="fas fa-phone"></i> 0984987139</span>
+          <span
+            ><i class="fas fa-envelope"></i> ms.dangthihienluong@gmail.com</span
+          >
+        </div>
+        <div class="social-links">
+          <a href="https://www.facebook.com/dangthihienluong/" target="_blank"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a href="https://x.com/Hien_Luong_pre" target="_blank"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a href="https://www.instagram.com/hien_luong_05/" target="_blank"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>Plant Hospital</h1>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="{{ url_for('home') }}">Trang chủ</a></li>
+            <li><a href="{{ url_for('about') }}">Giới thiệu</a></li>
+            <li>
+              <a href="{{ url_for('expert_consultation') }}" class="active"
+                >Tư vấn chuyên gia</a
+              >
+            </li>
+            <li><a href="{{ url_for('ai_diagnosis') }}">Chẩn đoán AI</a></li>
+            <li><a href="{{ url_for('pharmacy') }}">Nhà thuốc</a></li>
+            <li><a href="{{ url_for('contact') }}">Liên hệ</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Tư vấn chuyên gia<br />cho cây trồng</h1>
+          <p>
+            Kết nối với các chuyên gia hàng đầu về bệnh cây trồng. Nhận tư vấn
+            chuyên sâu và giải pháp hiệu quả cho vườn cây của bạn.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn-primary" onclick="openModal('questionModal')">
+              Đặt câu hỏi miễn phí
+            </button>
+            <a href="#services" class="btn-secondary">Tìm hiểu thêm</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="features-container">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>100% Bảo mật</h3>
+          <p>
+            Thông tin của bạn được bảo vệ tuyệt đối. Chúng tôi cam kết không
+            chia sẻ dữ liệu với bên thứ ba.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Đội ngũ chuyên gia</h3>
+          <p>
+            Các chuyên gia có nhiều năm kinh nghiệm trong lĩnh vực bảo vệ thực
+            vật và nông nghiệp.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <h3>Tư vấn cá nhân hóa</h3>
+          <p>
+            Mỗi trường hợp được phân tích riêng biệt để đưa ra giải pháp phù hợp
+            nhất.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section" id="services">
+      <div class="services-container">
+        <h2 class="section-title">Dịch vụ tư vấn</h2>
+        <p class="section-subtitle">
+          Chọn gói dịch vụ phù hợp với nhu cầu của bạn
+        </p>
+
+        <div class="services-grid">
+          <!-- Service 1: Free Questions -->
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            <h3 class="service-title">Đặt câu hỏi</h3>
+            <p class="service-description">
+              Gửi câu hỏi và hình ảnh cây bệnh. Chuyên gia sẽ phản hồi qua email
+              trong vòng 24-48h.
+            </p>
+            <div class="service-price">Miễn phí</div>
+            <ul class="service-features">
+              <li><i class="fas fa-check"></i> Phản hồi trong 24-48h</li>
+              <li><i class="fas fa-check"></i> Tư vấn cơ bản</li>
+              <li><i class="fas fa-check"></i> Gửi qua email</li>
+              <li><i class="fas fa-check"></i> Không giới hạn câu hỏi</li>
+            </ul>
+            <button class="service-btn" onclick="openModal('questionModal')">
+              Đặt câu hỏi ngay
+            </button>
+          </div>
+
+          <!-- Service 2: Live Chat -->
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="service-title">Chat trực tiếp</h3>
+            <p class="service-description">
+              Trao đổi trực tiếp với chuyên gia qua chat. Nhận câu trả lời ngay
+              lập tức.
+            </p>
+            <div class="service-price">50.000đ/30 phút</div>
+            <ul class="service-features">
+              <li><i class="fas fa-check"></i> Chat thời gian thực</li>
+              <li><i class="fas fa-check"></i> Chia sẻ hình ảnh</li>
+              <li><i class="fas fa-check"></i> Tư vấn chi tiết</li>
+              <li><i class="fas fa-check"></i> Lưu lịch sử chat</li>
+            </ul>
+            <button class="service-btn" onclick="openModal('chatModal')">
+              Bắt đầu chat
+            </button>
+          </div>
+
+          <!-- Service 3: Expert Visit -->
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <h3 class="service-title">Tư vấn tại nhà</h3>
+            <p class="service-description">
+              Chuyên gia đến tận nơi để kiểm tra và tư vấn trực tiếp cho vườn
+              cây của bạn.
+            </p>
+            <div class="service-price">500.000đ/lần</div>
+            <ul class="service-features">
+              <li><i class="fas fa-check"></i> Chuyên gia đến tại nhà</li>
+              <li><i class="fas fa-check"></i> Kiểm tra toàn diện</li>
+              <li><i class="fas fa-check"></i> Báo cáo chi tiết</li>
+              <li><i class="fas fa-check"></i> Hướng dẫn điều trị</li>
+            </ul>
+            <button class="service-btn" onclick="openModal('visitModal')">
+              Đặt lịch hẹn
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <div class="steps-container">
+        <h2 class="section-title">Quy trình tư vấn</h2>
+        <p class="section-subtitle">
+          3 bước đơn giản để nhận được tư vấn chuyên nghiệp
+        </p>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <h3>Gửi thông tin</h3>
+            <p>
+              Điền form với thông tin chi tiết về tình trạng cây và đính kèm
+              hình ảnh minh họa.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <h3>Chuyên gia phân tích</h3>
+            <p>
+              Đội ngũ chuyên gia sẽ phân tích tình trạng và đưa ra chẩn đoán
+              chính xác.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <h3>Nhận tư vấn</h3>
+            <p>
+              Bạn sẽ nhận được lời khuyên chi tiết và phương án điều trị hiệu
+              quả.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('questionModal')">&times;</span>
+        <h2>Đặt câu hỏi miễn phí</h2>
+        <form
+          id="questionForm"
+          action="{{ url_for('submit_question') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label for="name">Họ và tên *</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="tel" id="phone" name="phone" />
+          </div>
+          <div class="form-group">
+            <label for="plant_type">Loại cây trồng *</label>
+            <select id="plant_type" name="plant_type" required>
+              <option value="">Chọn loại cây</option>
+              <option value="rice">Lúa</option>
+              <option value="corn">Ngô</option>
+              <option value="tomato">Cà chua</option>
+              <option value="potato">Khoai tây</option>
+              <option value="other">Khác</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="question">Mô tả chi tiết vấn đề *</label>
+            <textarea
+              id="question"
+              name="question"
+              required
+              placeholder="Mô tả tình trạng cây, triệu chứng bệnh, thời gian phát hiện..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="images">Hình ảnh cây bệnh</label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              multiple
+              accept="image/*"
+            />
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%">
+            Gửi câu hỏi
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('chatModal')">&times;</span>
+        <h2>Chat với chuyên gia</h2>
+        <p>Để bắt đầu chat trực tiếp, vui lòng thanh toán phí dịch vụ.</p>
+        <form id="chatForm">
+          <div class="form-group">
+            <label for="chat_name">Họ và tên *</label>
+            <input type="text" id="chat_name" name="chat_name" required />
+          </div>
+          <div class="form-group">
+            <label for="chat_email">Email *</label>
+            <input type="email" id="chat_email" name="chat_email" required />
+          </div>
+          <div class="form-group">
+            <label for="chat_duration">Thời gian chat</label>
+            <select id="chat_duration" name="chat_duration">
+              <option value="30">30 phút - 50.000đ</option>
+              <option value="60">60 phút - 90.000đ</option>
+            </select>
+          </div>
+          <button
+            type="button"
+            class="btn-primary"
+            style="width: 100%"
+            onclick="startChat()"
+          >
+            Thanh toán và bắt đầu
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Visit Modal -->
+    <div id="visitModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('visitModal')">&times;</span>
+        <h2>Đặt lịch tư vấn tại nhà</h2>
+        <form id="visitForm" action="{{ url_for('book_visit') }}" method="POST">
+          <div class="form-group">
+            <label for="visit_name">Họ và tên *</label>
+            <input type="text" id="visit_name" name="visit_name" required />
+          </div>
+          <div class="form-group">
+            <label for="visit_email">Email *</label>
+            <input type="email" id="visit_email" name="visit_email" required />
+          </div>
+          <div class="form-group">
+            <label for="visit_phone">Số điện thoại *</label>
+            <input type="tel" id="visit_phone" name="visit_phone" required />
+          </div>
+          <div class="form-group">
+            <label for="visit_address">Địa chỉ *</label>
+            <textarea
+              id="visit_address"
+              name="visit_address"
+              required
+              placeholder="Địa chỉ chi tiết để chuyên gia đến tư vấn"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="visit_date">Ngày mong muốn *</label>
+            <input type="date" id="visit_date" name="visit_date" required />
+          </div>
+          <div class="form-group">
+            <label for="visit_time">Khung giờ</label>
+            <select id="visit_time" name="visit_time">
+              <option value="morning">Sáng (8:00 - 12:00)</option>
+              <option value="afternoon">Chiều (13:00 - 17:00)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="garden_size">Quy mô vườn</label>
+            <select id="garden_size" name="garden_size">
+              <option value="small">Nhỏ (< 100m²)</option>
+              <option value="medium">Trung bình (100-500m²)</option>
+              <option value="large">Lớn (> 500m²)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%">
+            Đặt lịch hẹn
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+      <div class="chat-button" onclick="openChat()">
+        <i class="fas fa-comments"></i>
+      </div>
+    </div>
+
+    <script>
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach((modal) => {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+      };
+
+      // Chat functions
+      function openChat() {
+        // Mở Tawk.to chat widget
+        if (typeof Tawk_API !== "undefined") {
+          Tawk_API.toggle();
+        } else {
+          openModal("chatModal");
+        }
+      }
+
+      function startChat() {
+        alert(
+          "Chức năng thanh toán đang được phát triển. Vui lòng liên hệ hotline để được hỗ trợ."
+        );
+      }
+
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Form submissions
+      document
+        .getElementById("questionForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Add your form submission logic here
+          alert(
+            "Câu hỏi đã được gửi thành công! Chúng tôi sẽ phản hồi trong vòng 24-48h."
+          );
+          closeModal("questionModal");
+        });
+
+      document
+        .getElementById("visitForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Add your form submission logic here
+          alert(
+            "Đặt lịch thành công! Chúng tôi sẽ liên hệ xác nhận trong thời gian sớm nhất."
+          );
+          closeModal("visitModal");
+        });
+    </script>
+
+    <!-- Tawk.to Chat Integration -->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"),
+          s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = "https://embed.tawk.to/YOUR_TAWK_ID/YOUR_WIDGET_ID";
+        s1.charset = "UTF-8";
+        s1.setAttribute("crossorigin", "*");
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+  </body>
+</html>
