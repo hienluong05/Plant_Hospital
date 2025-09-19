@@ -1,8 +1,0 @@
-Flask-SocketIO
-SQLAlchemy
-Werkzeug
-torch
-torchvision
-Pillow
-pandas
-numpy
