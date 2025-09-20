@@ -377,152 +377,51 @@
             <input
               type="text"
               class="search-input"
+              id="searchInput"
               placeholder="Search for treatments, diseases, or products..."
+              oninput="renderProducts()"
             />
-            <button class="search-btn">
+            <button class="search-btn" onclick="renderProducts()">
               <i class="fas fa-search"></i> Search
             </button>
           </div>
-          <div class="category-filters">
-            <a href="#" class="filter-btn active">All Products</a>
-            <a href="#" class="filter-btn">Fungicides</a>
-            <a href="#" class="filter-btn">Pesticides</a>
-            <a href="#" class="filter-btn">Fertilizers</a>
-            <a href="#" class="filter-btn">Organic Solutions</a>
-            <a href="#" class="filter-btn">Growth Enhancers</a>
+          <div class="category-filters" id="categoryFilters">
+            <a href="#" class="filter-btn active" data-category="All"
+              >All Products</a
+            >
+            <a href="#" class="filter-btn" data-category="Fungicide"
+              >Fungicides</a
+            >
+            <a href="#" class="filter-btn" data-category="Pesticide"
+              >Pesticides</a
+            >
+            <a href="#" class="filter-btn" data-category="Bactericide"
+              >Bactericides</a
+            >
+            <a href="#" class="filter-btn" data-category="Virucide"
+              >Virucides</a
+            >
+            <a href="#" class="filter-btn" data-category="Fertilizer"
+              >Fertilizers</a
+            >
+            <a href="#" class="filter-btn" data-category="Organic"
+              >Organic Solutions</a
+            >
+            <a href="#" class="filter-btn" data-category="Growth"
+              >Growth Enhancers</a
+            >
+            <a href="#" class="filter-btn" data-category="Biological"
+              >Biological Control</a
+            >
           </div>
         </div>
 
         <!-- Products Grid -->
-        <div class="products-grid">
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-shield-alt"></i>
-            </div>
-            <h3 class="product-name">FungiFight Pro</h3>
-            <p class="product-category">Systemic Fungicide</p>
-            <p class="product-description">
-              Advanced fungicide for treating leaf spot, blight, and rust
-              diseases. Provides both preventive and curative action.
-            </p>
-            <div class="product-price">$24.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-bug"></i>
-            </div>
-            <h3 class="product-name">BugBuster Organic</h3>
-            <p class="product-category">Organic Insecticide</p>
-            <p class="product-description">
-              Eco-friendly solution for aphids, whiteflies, and spider mites.
-              Safe for beneficial insects and the environment.
-            </p>
-            <div class="product-price">$18.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-seedling"></i>
-            </div>
-            <h3 class="product-name">VitalGrow Plus</h3>
-            <p class="product-category">Growth Enhancer</p>
-            <p class="product-description">
-              Comprehensive nutrient solution that boosts plant immunity and
-              promotes healthy growth and recovery.
-            </p>
-            <div class="product-price">$32.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-leaf"></i>
-            </div>
-            <h3 class="product-name">CopperShield</h3>
-            <p class="product-category">Copper-based Fungicide</p>
-            <p class="product-description">
-              Traditional copper-based treatment for bacterial diseases and
-              fungal infections. Suitable for organic farming.
-            </p>
-            <div class="product-price">$21.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-tint"></i>
-            </div>
-            <h3 class="product-name">NutriFeed Complete</h3>
-            <p class="product-category">Liquid Fertilizer</p>
-            <p class="product-description">
-              Balanced liquid fertilizer with micronutrients. Helps plants
-              recover from disease stress and builds resistance.
-            </p>
-            <div class="product-price">$28.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="product-card">
-            <div class="product-icon">
-              <i class="fas fa-microscope"></i>
-            </div>
-            <h3 class="product-name">BioControl Kit</h3>
-            <p class="product-category">Biological Control</p>
-            <p class="product-description">
-              Beneficial microorganisms that naturally suppress plant diseases
-              and improve soil health.
-            </p>
-            <div class="product-price">$45.99</div>
-            <div class="product-actions">
-              <button class="btn-primary">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-              </button>
-              <button class="btn-secondary">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
-          </div>
+        <div class="products-grid" id="productsGrid">
+          <!-- JS render sản phẩm tại đây -->
         </div>
 
-        <!-- Information Section -->
+        <!-- Information Section giữ nguyên -->
         <div class="info-section">
           <h2 class="info-title">Why Choose Our Pharmacy?</h2>
           <div class="info-grid">
@@ -570,5 +469,219 @@
         </div>
       </div>
     </main>
+    <script>
+      // Danh sách sản phẩm mẫu, mỗi sản phẩm có category (dạng key English, có thể dùng cho filter)
+      const products = [
+        // Fungicides
+        {
+          icon: "fa-shield-alt",
+          name: "FungiFight Pro",
+          category: "Fungicide",
+          catLabel: "Systemic Fungicide",
+          description:
+            "Advanced fungicide for treating leaf spot, blight, and rust diseases. Provides both preventive and curative action.",
+          price: "$24.99",
+        },
+        {
+          icon: "fa-leaf",
+          name: "CopperShield",
+          category: "Fungicide",
+          catLabel: "Copper-based Fungicide",
+          description:
+            "Traditional copper-based treatment for bacterial diseases and fungal infections. Suitable for organic farming.",
+          price: "$21.99",
+        },
+        {
+          icon: "fa-vial",
+          name: "NeoPhos Max",
+          category: "Fungicide",
+          catLabel: "Contact Fungicide",
+          description:
+            "Broad spectrum contact fungicide, quick action on mildew and leaf spot.",
+          price: "$15.99",
+        },
+        // Pesticides
+        {
+          icon: "fa-bug",
+          name: "BugBuster Organic",
+          category: "Pesticide",
+          catLabel: "Organic Insecticide",
+          description:
+            "Eco-friendly solution for aphids, whiteflies, and spider mites. Safe for beneficial insects and the environment.",
+          price: "$18.99",
+        },
+        {
+          icon: "fa-spider",
+          name: "InsectoXpert",
+          category: "Pesticide",
+          catLabel: "Synthetic Insecticide",
+          description:
+            "Highly effective against a wide range of plant-eating insects. Quick knockdown and long residual.",
+          price: "$22.99",
+        },
+        // Bactericides
+        {
+          icon: "fa-virus",
+          name: "BactoClean 200",
+          category: "Bactericide",
+          catLabel: "Bactericide",
+          description:
+            "Targeted solution against bacterial leaf spot, canker, and other plant bacterial diseases.",
+          price: "$19.99",
+        },
+        {
+          icon: "fa-shield-virus",
+          name: "Quartz-Bac",
+          category: "Bactericide",
+          catLabel: "Broad-spectrum Bactericide",
+          description:
+            "Effective on both Gram-negative and Gram-positive plant pathogens.",
+          price: "$23.99",
+        },
+        // Virucides
+        {
+          icon: "fa-disease",
+          name: "ViruStop Forte",
+          category: "Virucide",
+          catLabel: "Plant Virucide",
+          description:
+            "Protects plants from mosaic and wilt viruses. Use preventively for best results.",
+          price: "$27.99",
+        },
+        {
+          icon: "fa-biohazard",
+          name: "ViraShield",
+          category: "Virucide",
+          catLabel: "Systemic Virucide",
+          description:
+            "Systemic action against plant viral infections, safe for vegetables and fruits.",
+          price: "$32.00",
+        },
+        // Fertilizers
+        {
+          icon: "fa-tint",
+          name: "NutriFeed Complete",
+          category: "Fertilizer",
+          catLabel: "Liquid Fertilizer",
+          description:
+            "Balanced liquid fertilizer with micronutrients. Helps plants recover from disease stress and builds resistance.",
+          price: "$28.99",
+        },
+        // Organic Solutions
+        {
+          icon: "fa-leaf",
+          name: "GreenGuard",
+          category: "Organic",
+          catLabel: "Organic Plant Protector",
+          description:
+            "Natural plant extract to boost immunity and deter pests. Safe for daily use.",
+          price: "$17.50",
+        },
+        // Growth Enhancers
+        {
+          icon: "fa-seedling",
+          name: "VitalGrow Plus",
+          category: "Growth",
+          catLabel: "Growth Enhancer",
+          description:
+            "Comprehensive nutrient solution that boosts plant immunity and promotes healthy growth and recovery.",
+          price: "$32.99",
+        },
+        // Biological Control
+        {
+          icon: "fa-microscope",
+          name: "BioControl Kit",
+          category: "Biological",
+          catLabel: "Biological Control",
+          description:
+            "Beneficial microorganisms that naturally suppress plant diseases and improve soil health.",
+          price: "$45.99",
+        },
+      ];
+
+      // Mapping để hiển thị nút lọc -> tên category tương ứng
+      const categoryMap = {
+        All: null,
+        Fungicide: "Fungicide",
+        Pesticide: "Pesticide",
+        Bactericide: "Bactericide",
+        Virucide: "Virucide",
+        Fertilizer: "Fertilizer",
+        Organic: "Organic",
+        Growth: "Growth",
+        Biological: "Biological",
+      };
+
+      // Gắn sự kiện cho các nút lọc
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterBtns = document.querySelectorAll(".filter-btn");
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+            renderProducts();
+          });
+        });
+        renderProducts();
+      });
+
+      function renderProducts() {
+        const grid = document.getElementById("productsGrid");
+        const search = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toLowerCase();
+        const activeBtn = document.querySelector(".filter-btn.active");
+        const selectedCat = activeBtn
+          ? activeBtn.getAttribute("data-category")
+          : "All";
+        grid.innerHTML = "";
+
+        let filtered = products;
+
+        if (selectedCat !== "All" && categoryMap[selectedCat]) {
+          filtered = filtered.filter(
+            (p) => p.category === categoryMap[selectedCat]
+          );
+        }
+
+        if (search) {
+          filtered = filtered.filter(
+            (p) =>
+              p.name.toLowerCase().includes(search) ||
+              p.catLabel.toLowerCase().includes(search) ||
+              p.description.toLowerCase().includes(search)
+          );
+        }
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#888;">No products found.</div>`;
+          return;
+        }
+
+        for (const p of filtered) {
+          grid.innerHTML += `
+            <div class="product-card">
+              <div class="product-icon">
+                <i class="fas ${p.icon}"></i>
+              </div>
+              <h3 class="product-name">${p.name}</h3>
+              <p class="product-category">${p.catLabel}</p>
+              <p class="product-description">${p.description}</p>
+              <div class="product-price">${p.price}</div>
+              <div class="product-actions">
+                <button class="btn-primary">
+                  <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="btn-secondary">
+                  <i class="fas fa-info-circle"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+    </script>
   </body>
 </html>

@@ -20,7 +20,9 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
         color: #333;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Sử dụng ảnh nền */
+        background: url('{{ url_for("static", filename="ai-bg.jpg") }}') center
+          center/cover no-repeat;
         min-height: 100vh;
       }
 

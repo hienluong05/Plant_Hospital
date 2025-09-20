@@ -76,3 +76,28 @@ CREATE TABLE experts (
 -- Insert sample experts
 INSERT INTO experts (name, email, password, phone) 
 VALUES ('Dr. Victoria Lewis', 'ms.victorialewis@gmail.com', '123456', '0901234567');
+
+-- Bảng lưu phiên chat (giữa 1 khách và 1 chuyên gia)
+CREATE TABLE chat_session (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    expert_id INTEGER NOT NULL,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_message_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'active',
+    FOREIGN KEY(user_id) REFERENCES user(id),
+    FOREIGN KEY(expert_id) REFERENCES experts(id)
+);
+
+-- Bảng lưu từng tin nhắn
+CREATE TABLE chat_message (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL,
+    sender_type TEXT NOT NULL, -- 'user' hoặc 'expert'
+    sender_id INTEGER,         -- id của người gửi (user hoặc expert)
+    content TEXT,
+    image_path TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT 0,
+    FOREIGN KEY(session_id) REFERENCES chat_session(id)
+);

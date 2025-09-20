@@ -6,10 +6,3 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.jpg
-*.jpeg
-*.png
-*.gif
-# Ignore instance
-*.sqlite
-instance/
