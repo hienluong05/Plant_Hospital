@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plant Blog - Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #d0f3e6 0%,
+          #4caf50 60%,
+          #a2c5f4 100%
+        );
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .blog-header {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 0;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 24px 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .blog-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .logo h1 {
+        color: #4caf50;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .blog-nav a {
+        color: #333;
+        text-decoration: none;
+        margin-left: 22px;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .blog-nav a.active,
+      .blog-nav a:hover {
+        color: #4caf50;
+      }
+      .main-content {
+        max-width: 900px;
+        margin: 40px auto 0 auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 6px 32px rgba(0, 0, 0, 0.08);
+        padding: 38px 38px 60px 38px;
+      }
+      .blog-title {
+        text-align: center;
+        color: #4caf50;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      .blog-desc {
+        text-align: center;
+        color: #555;
+        margin-bottom: 38px;
+        font-size: 1.1rem;
+      }
+      .blog-actions {
+        text-align: right;
+        margin-bottom: 25px;
+      }
+      .btn-create {
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 11px 24px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.22s;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-create:hover {
+        background: #388e3c;
+      }
+      .blog-list {
+        margin-top: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .blog-post-item {
+        background: #f7fff7;
+        border-left: 6px solid #4caf50;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        padding: 22px 24px 18px 26px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        transition: box-shadow 0.2s;
+        position: relative;
+      }
+      .blog-post-item:hover {
+        box-shadow: 0 6px 24px rgba(76, 175, 80, 0.1);
+      }
+      .blog-post-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 7px;
+        text-decoration: none;
+        display: block;
+        transition: color 0.2s;
+      }
+      .blog-post-title:hover {
+        color: #4caf50;
+      }
+      .blog-meta {
+        font-size: 0.93rem;
+        color: #6a9f7b;
+        margin-bottom: 7px;
+      }
+      .blog-body-preview {
+        color: #555;
+        margin-bottom: 0;
+        font-size: 1.07rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .no-posts {
+        text-align: center;
+        color: #888;
+        margin: 60px 0 40px 0;
+        font-size: 1.2rem;
+      }
+      @media (max-width: 600px) {
+        .main-content {
+          padding: 16px 3vw 28px 3vw;
+        }
+        .blog-title {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="blog-header">
+      <div class="container">
+        <div class="logo">
+          <h1>Plant Hospital</h1>
+        </div>
+        <nav class="blog-nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('blog.index') }}" class="active">Blog</a>
+          <a href="{{ url_for('pharmacy') }}">Pharmacy</a>
+          <a href="{{ url_for('expert_consultation') }}">Expert</a>
+        </nav>
+      </div>
+    </header>
+    <div class="main-content">
+      <h2 class="blog-title">
+        <i class="fas fa-blog"></i> Plant Knowledge Blog
+      </h2>
+      <div class="blog-desc">
+        Sharing experiences, disease prevention, and plant care knowledge from
+        the Plant Hospital community.
+      </div>
+      <div class="blog-actions">
+        <a href="{{ url_for('blog.create') }}" class="btn-create">
+          <i class="fas fa-plus"></i> New Post
+        </a>
+      </div>
+      {% if posts and posts|length > 0 %}
+      <ul class="blog-list">
+        {% for post in posts %}
+        <li class="blog-post-item">
+          <a
+            href="{{ url_for('blog.detail', id=post['id']) }}"
+            class="blog-post-title"
+            >{{ post['title'] }}</a
+          >
+          <div class="blog-meta">
+            <i class="fas fa-user"></i> {{ post['username'] }}
+            &nbsp;&nbsp;|&nbsp; <i class="fas fa-calendar"></i> {{
+            post['created'].strftime('%Y-%m-%d %H:%M') if post['created'] }}
+          </div>
+          <div class="blog-body-preview">
+            {{ post['body'][:180] }}{% if post['body']|length > 180 %}...{%
+            endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="no-posts">
+        <i class="fas fa-seedling" style="font-size: 2.1rem; color: #4caf50"></i
+        ><br />
+        No blog posts yet. Be the first to share your knowledge!
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

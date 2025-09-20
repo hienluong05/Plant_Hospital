@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ post['title'] }} - Plant Blog</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #d0f3e6 0%,
+          #4caf50 60%,
+          #a2c5f4 100%
+        );
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .blog-header {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 0;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 24px 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .blog-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .logo h1 {
+        color: #4caf50;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .blog-nav a {
+        color: #333;
+        text-decoration: none;
+        margin-left: 22px;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .blog-nav a.active,
+      .blog-nav a:hover {
+        color: #4caf50;
+      }
+      .main-content {
+        max-width: 800px;
+        margin: 40px auto 0 auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 6px 32px rgba(0, 0, 0, 0.08);
+        padding: 38px 38px 48px 38px;
+      }
+      .post-title {
+        color: #4caf50;
+        font-size: 2.1rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .post-meta {
+        text-align: center;
+        color: #6a9f7b;
+        margin-bottom: 26px;
+        font-size: 1rem;
+      }
+      .post-body {
+        color: #333;
+        font-size: 1.13rem;
+        line-height: 1.8;
+        white-space: pre-line;
+        margin-bottom: 32px;
+      }
+      .post-actions {
+        text-align: right;
+        margin-top: 20px;
+      }
+      .btn-back {
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 11px 26px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.22s;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-back:hover {
+        background: #388e3c;
+      }
+      @media (max-width: 600px) {
+        .main-content {
+          padding: 14px 3vw 30px 3vw;
+        }
+        .post-title {
+          font-size: 1.3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="blog-header">
+      <div class="container">
+        <div class="logo">
+          <h1>Plant Hospital</h1>
+        </div>
+        <nav class="blog-nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('blog.index') }}" class="active">Blog</a>
+          <a href="{{ url_for('pharmacy') }}">Pharmacy</a>
+          <a href="{{ url_for('expert_consultation') }}">Expert</a>
+        </nav>
+      </div>
+    </header>
+    <div class="main-content">
+      <h2 class="post-title">{{ post['title'] }}</h2>
+      <div class="post-meta">
+        <i class="fas fa-user"></i> {{ post['username'] }} &nbsp;&nbsp;|&nbsp;
+        <i class="fas fa-calendar"></i> {{ post['created'].strftime('%Y-%m-%d
+        %H:%M') if post['created'] }}
+      </div>
+      <div class="post-body">{{ post['body'] }}</div>
+      <div class="post-actions">
+        <a href="{{ url_for('blog.index') }}" class="btn-back">
+          <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -88,6 +88,10 @@ def create_app():
     # Đăng ký blueprint auth
     from . import auth
     app.register_blueprint(auth.bp)
+    
+    # Đăng ký blueprint blog
+    from . import blog
+    app.register_blueprint(blog.bp)
 
     # Helper function để get database
     def get_db():
