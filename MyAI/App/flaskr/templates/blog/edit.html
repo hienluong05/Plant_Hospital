@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Blog Post - Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #d0f3e6 0%,
+          #4caf50 60%,
+          #a2c5f4 100%
+        );
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .blog-header {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 0;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 24px 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .blog-header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .logo h1 {
+        color: #4caf50;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .blog-nav a {
+        color: #333;
+        text-decoration: none;
+        margin-left: 22px;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .blog-nav a.active,
+      .blog-nav a:hover {
+        color: #4caf50;
+      }
+      .main-content {
+        max-width: 600px;
+        margin: 40px auto 0 auto;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 6px 32px rgba(0, 0, 0, 0.08);
+        padding: 38px 38px 40px 38px;
+      }
+      .blog-title {
+        text-align: center;
+        color: #4caf50;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+      }
+      form {
+        margin-top: 35px;
+      }
+      .form-group {
+        margin-bottom: 22px;
+      }
+      label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 7px;
+        color: #388e3c;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border-radius: 9px;
+        border: 1.5px solid #cfd8dc;
+        font-size: 1.06rem;
+        background: #f8fff8;
+        transition: border-color 0.2s;
+        font-family: inherit;
+        resize: none;
+      }
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #4caf50;
+        background: #fff;
+      }
+      textarea {
+        min-height: 140px;
+        max-height: 400px;
+      }
+      .btn-submit {
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 13px 32px;
+        font-weight: 600;
+        font-size: 1.13rem;
+        cursor: pointer;
+        transition: background 0.22s;
+        margin-top: 10px;
+        display: inline-block;
+      }
+      .btn-submit:hover {
+        background: #388e3c;
+      }
+      .form-footer {
+        margin-top: 26px;
+        text-align: right;
+      }
+      .form-footer a {
+        color: #4caf50;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .form-footer a:hover {
+        text-decoration: underline;
+      }
+      .alert {
+        background: #fbe9e7;
+        color: #d84315;
+        border-radius: 8px;
+        padding: 11px 18px;
+        margin-bottom: 16px;
+        font-size: 1rem;
+      }
+      @media (max-width: 600px) {
+        .main-content {
+          padding: 14px 3vw 30px 3vw;
+        }
+        .blog-title {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="blog-header">
+      <div class="container">
+        <div class="logo">
+          <h1>Plant Hospital</h1>
+        </div>
+        <nav class="blog-nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('blog.index') }}">Blog</a>
+          <a href="{{ url_for('pharmacy') }}">Pharmacy</a>
+          <a href="{{ url_for('expert_consultation') }}">Expert</a>
+        </nav>
+      </div>
+    </header>
+    <div class="main-content">
+      <h2 class="blog-title">
+        <i class="fas fa-edit"></i> Edit Your Blog Post
+      </h2>
+      {% if error %}
+      <div class="alert">{{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <div class="form-group">
+          <label for="title">Post Title *</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            maxlength="120"
+            required
+            value="{% if request.form.title is defined %}{{ request.form.title }}{% else %}{{ post['title'] }}{% endif %}"
+          />
+        </div>
+        <div class="form-group">
+          <label for="body">Content *</label>
+          <textarea
+            name="body"
+            id="body"
+            required
+            maxlength="5000"
+            placeholder="Share your experience, tips, or plant care knowledge here..."
+          >
+{% if request.form.body is defined %}{{ request.form.body }}{% else %}{{ post['body'] }}{% endif %}</textarea
+          >
+        </div>
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+      </form>
+      <div class="form-footer">
+        <a href="{{ url_for('blog.my_blogs') }}"
+          ><i class="fas fa-arrow-left"></i> Back to My Blogs</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
