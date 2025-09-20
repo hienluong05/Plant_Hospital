@@ -12,7 +12,7 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 from flask_socketio import SocketIO
 from . import chat
-from flask import session
+from flask import session, jsonify, request
 
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
@@ -134,6 +134,62 @@ def create_app():
     @app.route('/pharmacy')
     def pharmacy():
         return render_template('pharmacy.html')
+
+    @app.route('/add-to-cart', methods=['POST'])
+    def add_to_cart():
+        data = request.json
+        if not data or 'id' not in data:
+            return jsonify({'status': 'error', 'message': 'No product info'}), 400
+
+        product = {
+            'id': data['id'],
+            'name': data['name'],
+            'price': data['price'],
+            'quantity': 1
+        }
+
+        # Khởi tạo giỏ hàng nếu chưa có
+        if 'cart' not in session:
+            session['cart'] = []
+
+        cart = session['cart']
+        # Kiểm tra nếu đã có thì tăng số lượng
+        for item in cart:
+            if item['id'] == product['id']:
+                item['quantity'] += 1
+                session['cart'] = cart
+                return jsonify({'status': 'ok', 'cart': cart})
+        # Nếu chưa có thì thêm mới
+        cart.append(product)
+        session['cart'] = cart
+        return jsonify({'status': 'ok', 'cart': cart})
+
+    @app.route('/cart')
+    def cart():
+        cart = session.get("cart", [])
+        return render_template("cart.html", cart=cart)
+
+    @app.route('/remove-from-cart', methods=['POST'])
+    def remove_from_cart():
+        data = request.get_json()
+        product_id = data.get("id")
+        cart = session.get("cart", [])
+        cart = [item for item in cart if item["id"] != product_id]
+        session["cart"] = cart
+        return jsonify({"status": "ok"})
+
+    @app.route('/update-cart', methods=['POST'])
+    def update_cart():
+        data = request.json
+        product_id = data.get('id')
+        quantity = int(data.get('quantity', 1))
+        cart = session.get('cart', [])
+        for item in cart:
+            if item['id'] == product_id:
+                item['quantity'] = quantity
+                break
+        session['cart'] = cart
+        return jsonify({'status': 'ok'})
 
     # Route cho expert consultation - CHỈ ĐỊNH NGHĨA 1 LẦN
     @app.route('/expert-consultation')

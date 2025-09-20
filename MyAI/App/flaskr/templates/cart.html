@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - Plant Pharmacy</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #d0f3e6 0%,
+          #4caf50 50%,
+          #a2c5f4 100%
+        );
+        min-height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .container {
+        max-width: 900px;
+        margin: 40px auto 0 auto;
+        padding: 0 20px;
+      }
+      .cart-header {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.11);
+        padding: 30px 32px 18px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cart-title {
+        font-size: 2.3rem;
+        font-weight: 700;
+        color: #ff9800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .cart-btn {
+        background: #ff9800;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 12px 22px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: background 0.2s;
+        margin-left: 12px;
+        display: inline-block;
+        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.08);
+      }
+      .cart-btn:hover {
+        background: #e68900;
+        color: #fff;
+      }
+      .cart-content {
+        background: white;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        padding: 0 32px 36px 32px;
+      }
+      .cart-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 16px;
+        margin-top: 30px;
+      }
+      .cart-table th,
+      .cart-table td {
+        text-align: center;
+        padding: 12px 10px;
+      }
+      .cart-table th {
+        color: #ff9800;
+        font-size: 1.1rem;
+        border-bottom: 2px solid #ff9800;
+      }
+      .cart-table td {
+        background: #fff6eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        vertical-align: middle;
+      }
+      .cart-product {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 600;
+        color: #333;
+        justify-content: center;
+      }
+      .cart-product i {
+        font-size: 1.8rem;
+        color: #ff9800;
+        background: #fff2e0;
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .cart-quantity {
+        font-weight: 600;
+        color: #222;
+      }
+      .cart-remove-btn {
+        background: #fff;
+        border: 2px solid #ff9800;
+        color: #ff9800;
+        border-radius: 7px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 8px 14px;
+        transition: background 0.2s, color 0.2s;
+      }
+      .cart-remove-btn:hover {
+        background: #ff9800;
+        color: #fff;
+      }
+      .cart-empty {
+        text-align: center;
+        color: #aaa;
+        margin: 48px 0 48px 0;
+        font-size: 1.3rem;
+      }
+      .cart-summary {
+        margin-top: 32px;
+        text-align: right;
+      }
+      .cart-total-label {
+        font-size: 1.2rem;
+        color: #222;
+        margin-right: 12px;
+      }
+      .cart-total-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #ff9800;
+        letter-spacing: 1px;
+      }
+      .cart-checkout-btn {
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 16px;
+        padding: 14px 34px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        box-shadow: 0 2px 12px rgba(255, 152, 0, 0.11);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .cart-checkout-btn:hover {
+        background: #e68900;
+      }
+      @media (max-width: 700px) {
+        .container {
+          padding: 0 4vw;
+        }
+        .cart-header,
+        .cart-content {
+          padding: 16px 6vw;
+        }
+        .cart-title {
+          font-size: 1.5rem;
+        }
+        .cart-table th,
+        .cart-table td {
+          font-size: 0.95rem;
+          padding: 9px 3px;
+        }
+        .cart-summary {
+          margin-top: 20px;
+        }
+        .cart-total-price {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="cart-header">
+        <span class="cart-title"
+          ><i class="fas fa-shopping-cart"></i> Your Cart</span
+        >
+        <div>
+          <a href="{{ url_for('pharmacy') }}" class="cart-btn">
+            <i class="fas fa-arrow-left"></i> Back to Pharmacy
+          </a>
+        </div>
+      </div>
+      <div class="cart-content">
+        {% if cart and cart|length > 0 %}
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th style="width: 30%">Product</th>
+              <th style="width: 15%">Unit Price</th>
+              <th style="width: 13%">Quantity</th>
+              <th style="width: 15%">Subtotal</th>
+              <th style="width: 10%">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set total = 0 %} {% for item in cart %} {% set subtotal =
+            (item.price|replace('$','')|float) * item.quantity %} {% set total =
+            total + subtotal %}
+            <tr>
+              <td>
+                <div class="cart-product">
+                  {% if item.icon %}
+                  <i class="fas {{item.icon}}"></i>
+                  {% endif %} {{ item.name }}
+                </div>
+              </td>
+              <td>${{ '%.2f' % (item.price|replace('$','')|float) }}</td>
+              <td class="cart-quantity">{{ item.quantity }}</td>
+              <td style="font-weight: 600">${{ '%.2f' % subtotal }}</td>
+              <td>
+                <button
+                  class="cart-remove-btn"
+                  onclick="removeFromCart('{{ item.id }}')"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="cart-summary">
+          <span class="cart-total-label">Total:</span>
+          <span class="cart-total-price">${{ '%.2f' % total }}</span><br />
+          <button
+            class="cart-checkout-btn"
+            onclick="alert('Checkout chưa được hỗ trợ!')"
+          >
+            <i class="fas fa-credit-card"></i> Checkout
+          </button>
+        </div>
+        {% else %}
+        <div class="cart-empty">
+          <i
+            class="fas fa-shopping-basket"
+            style="font-size: 2.5rem; color: #ff9800"
+          ></i
+          ><br />
+          Your cart is empty.<br />
+          <a
+            href="{{ url_for('pharmacy') }}"
+            class="cart-btn"
+            style="margin-top: 20px"
+          >
+            <i class="fas fa-arrow-left"></i> Back to Pharmacy
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <script>
+      function removeFromCart(id) {
+        fetch("/remove-from-cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: id }),
+        }).then(() => location.reload());
+      }
+    </script>
+  </body>
+</html>

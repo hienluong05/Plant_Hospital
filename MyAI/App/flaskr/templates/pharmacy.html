@@ -22,9 +22,9 @@
         color: #333;
         background: linear-gradient(
           135deg,
-          #ff9a9e 0%,
-          #fecfef 50%,
-          #fecfef 100%
+          #d0f3e6 0%,
+          #4caf50 50%,
+          #a2c5f4 100%
         );
         min-height: 100vh;
       }
@@ -474,6 +474,7 @@
       const products = [
         // Fungicides
         {
+          id: "fungifight-pro",
           icon: "fa-shield-alt",
           name: "FungiFight Pro",
           category: "Fungicide",
@@ -483,6 +484,7 @@
           price: "$24.99",
         },
         {
+          id: "coppershield",
           icon: "fa-leaf",
           name: "CopperShield",
           category: "Fungicide",
@@ -492,6 +494,7 @@
           price: "$21.99",
         },
         {
+          id: "neophos-max",
           icon: "fa-vial",
           name: "NeoPhos Max",
           category: "Fungicide",
@@ -502,6 +505,7 @@
         },
         // Pesticides
         {
+          id: "bugbuster-organic",
           icon: "fa-bug",
           name: "BugBuster Organic",
           category: "Pesticide",
@@ -511,6 +515,7 @@
           price: "$18.99",
         },
         {
+          id: "insectoxpert",
           icon: "fa-spider",
           name: "InsectoXpert",
           category: "Pesticide",
@@ -521,6 +526,7 @@
         },
         // Bactericides
         {
+          id: "bactoclean-200",
           icon: "fa-virus",
           name: "BactoClean 200",
           category: "Bactericide",
@@ -530,6 +536,7 @@
           price: "$19.99",
         },
         {
+          id: "quartz-bac",
           icon: "fa-shield-virus",
           name: "Quartz-Bac",
           category: "Bactericide",
@@ -540,6 +547,7 @@
         },
         // Virucides
         {
+          id: "virustop-forte",
           icon: "fa-disease",
           name: "ViruStop Forte",
           category: "Virucide",
@@ -549,6 +557,7 @@
           price: "$27.99",
         },
         {
+          id: "virashield",
           icon: "fa-biohazard",
           name: "ViraShield",
           category: "Virucide",
@@ -559,6 +568,7 @@
         },
         // Fertilizers
         {
+          id: "nutrifeed-complete",
           icon: "fa-tint",
           name: "NutriFeed Complete",
           category: "Fertilizer",
@@ -569,6 +579,7 @@
         },
         // Organic Solutions
         {
+          id: "greenguard",
           icon: "fa-leaf",
           name: "GreenGuard",
           category: "Organic",
@@ -579,6 +590,7 @@
         },
         // Growth Enhancers
         {
+          id: "vitagrow-plus",
           icon: "fa-seedling",
           name: "VitalGrow Plus",
           category: "Growth",
@@ -589,6 +601,7 @@
         },
         // Biological Control
         {
+          id: "biocontrol-kit",
           icon: "fa-microscope",
           name: "BioControl Kit",
           category: "Biological",
@@ -671,7 +684,13 @@
               <p class="product-description">${p.description}</p>
               <div class="product-price">${p.price}</div>
               <div class="product-actions">
-                <button class="btn-primary">
+                <button class="btn-primary" onclick='addToCart(${JSON.stringify(
+                  {
+                    id: p.name.replace(/\s+/g, "-"), // hoặc dùng p.id nếu đã có
+                    name: p.name,
+                    price: p.price,
+                  }
+                )})'>
                   <i class="fas fa-shopping-cart"></i> Add to Cart
                 </button>
                 <button class="btn-secondary">
@@ -681,6 +700,22 @@
             </div>
           `;
         }
+      }
+
+      function addToCart(product) {
+        fetch("/add-to-cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(product),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              alert("Đã thêm vào giỏ hàng!");
+            } else {
+              alert("Có lỗi xảy ra!");
+            }
+          });
       }
     </script>
   </body>
