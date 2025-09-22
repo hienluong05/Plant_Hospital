@@ -16,7 +16,7 @@ def init_socketio(app):
     @socketio.on('send_message')
     def handle_send_message(data):
         msg = {
-            "user_name": session.get('username', 'Khách'),
+            "user_name": session.get('username', 'User'),
             "message": data['message'],
             "is_expert": session.get('is_expert', False),
         }

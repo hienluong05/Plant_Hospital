@@ -282,7 +282,7 @@ def create_app():
     @app.route('/expert-chat')
     def expert_chat():
         # Ở đây bạn có thể render một trang chat chuyên gia, tạm thời render template demo
-        return render_template('chat.html')
+        return render_template('expert_chat.html')
 
     return app
 
