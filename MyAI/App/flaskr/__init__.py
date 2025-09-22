@@ -21,17 +21,42 @@ def get_class_names_from_folder(dataset_dir):
     return class_names
 
 
-def get_latest_news(limit=5):
-    rss_url = "https://vnexpress.net/rss/khoa-hoc.rss"  # VD: mục Khoa học, có nhiều tin về môi trường, cây trồng
-    feed = feedparser.parse(rss_url)
+def get_latest_news(limit_per_source=5):
+    sources = [
+        {
+            "name": "AgWeb",
+            "url": "https://www.agweb.com/rss.xml"
+        },
+        {
+            "name": "Successful Farming",
+            "url": "https://www.agriculture.com/rss.xml"
+        },
+        {
+            "name": "The Western Producer",
+            "url": "https://www.producer.com/feed/"
+        },
+        {
+            "name": "Reuters Agriculture",
+            "url": "https://www.reuters.com/rssFeed/agricultureNews"
+        },
+        {
+            "name": "BBC Sci&Env",
+            "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"
+        },
+    ]
     news_list = []
-    for entry in feed.entries[:limit]:
-        news_list.append({
-            "title": entry.title,
-            "link": entry.link,
-            "published": entry.published if 'published' in entry else '',
-            "summary": entry.summary if 'summary' in entry else ''
-        })
+    for src in sources:
+        feed = feedparser.parse(src["url"])
+        for entry in feed.entries[:limit_per_source]:
+            news_list.append({
+                "title": entry.title,
+                "link": entry.link,
+                "published": entry.published if 'published' in entry else '',
+                "summary": entry.summary if 'summary' in entry else '',
+                "source": src["name"]
+            })
+    # Sắp xếp toàn bộ theo thời gian mới nhất (nếu muốn)
+    news_list.sort(key=lambda x: x['published'], reverse=True)
     return news_list
 
 def create_app():
@@ -117,7 +142,7 @@ def create_app():
     # Route cho trang chủ (không cần đăng nhập)
     @app.route('/')
     def home():
-        news_list = get_latest_news(limit=5)
+        news_list = get_latest_news()
         return render_template('home.html', news_list=news_list)
 
     # Route cho AI diagnosis (cần đăng nhập)

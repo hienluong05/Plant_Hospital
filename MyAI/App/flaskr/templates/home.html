@@ -499,6 +499,14 @@
           font-size: 0.97rem;
         }
       }
+      .news-source {
+        color: #4caf50;
+        font-size: 0.98em;
+        margin-left: 8px;
+        font-style: italic;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+      }
     </style>
   </head>
   <body>
@@ -638,14 +646,15 @@
     <section class="news-section">
       <div class="container">
         <h2 class="news-title">
-          <i class="fas fa-newspaper"></i> Tin tức mới về cây trồng
+          <i class="fas fa-newspaper"></i> News about plants
         </h2>
         <ul class="news-list">
           {% for news in news_list %}
           <li class="news-item">
             <a href="{{ news.link }}" target="_blank">
-              <strong>{{ news.title }}</strong><br />
+              <strong>{{ news.title }}</strong>
               <span class="news-date">{{ news.published }}</span>
+              <span class="news-source"> [{{ news.source }}] </span>
             </a>
             <div class="news-desc">{{ news.summary|safe }}</div>
           </li>
