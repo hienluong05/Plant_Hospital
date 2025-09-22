@@ -13,11 +13,26 @@ from torchvision.models import resnet50, ResNet50_Weights
 from flask_socketio import SocketIO
 from . import chat
 from flask import session, jsonify, request
+import feedparser
 
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
     class_names.sort()
     return class_names
+
+
+def get_latest_news(limit=5):
+    rss_url = "https://vnexpress.net/rss/khoa-hoc.rss"  # VD: mục Khoa học, có nhiều tin về môi trường, cây trồng
+    feed = feedparser.parse(rss_url)
+    news_list = []
+    for entry in feed.entries[:limit]:
+        news_list.append({
+            "title": entry.title,
+            "link": entry.link,
+            "published": entry.published if 'published' in entry else '',
+            "summary": entry.summary if 'summary' in entry else ''
+        })
+    return news_list
 
 def create_app():
     app = Flask(__name__)
@@ -102,7 +117,8 @@ def create_app():
     # Route cho trang chủ (không cần đăng nhập)
     @app.route('/')
     def home():
-        return render_template('home.html')
+        news_list = get_latest_news(limit=5)
+        return render_template('home.html', news_list=news_list)
 
     # Route cho AI diagnosis (cần đăng nhập)
     @app.route('/ai-diagnosis', methods=['GET', 'POST'])
