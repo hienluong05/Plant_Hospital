@@ -241,9 +241,9 @@
           <span class="cart-total-price">${{ '%.2f' % total }}</span><br />
           <button
             class="cart-checkout-btn"
-            onclick="alert('Checkout chưa được hỗ trợ!')"
+            onclick="window.location.href='/checkout-vnpay'"
           >
-            <i class="fas fa-credit-card"></i> Checkout
+            <i class="fas fa-credit-card"></i>Pay
           </button>
         </div>
         {% else %}

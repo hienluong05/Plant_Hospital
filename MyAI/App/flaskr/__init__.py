@@ -122,7 +122,7 @@ def create_app():
     with app.app_context():
         db_path = app.config['DATABASE']
         if not os.path.exists(db_path):
-            print("Database chưa tồn tại, tự động khởi tạo từ schema.sql...")
+            print("Database does not exist yet, automatically initialized from schema.sql...")
             db.init_db()
     
     # Đăng ký blueprint auth
@@ -274,41 +274,77 @@ def create_app():
             )
             database.commit()
             
-            flash('Câu hỏi đã được gửi thành công! Chúng tôi sẽ phản hồi trong vòng 24-48 giờ.', 'success')
+            flash('Question sent successfully! We will respond within 24-48 hours.', 'success')
             return redirect(url_for('expert_consultation'))
             
         except Exception as e:
-            flash('Có lỗi xảy ra. Vui lòng thử lại sau.', 'error')
+            flash('An error occurred. Please try again later.', 'error')
             return redirect(url_for('expert_consultation'))
+    
+    # Config vnpay
+    app.config['VNPAY_TMN_CODE'] = 'MQ6F4LQX' # Lấy từ VNPay
+    app.config['VNPAY_HASH_SECRET'] = 'B5ZAH92LELL58F9544OUQOEQNIH07DJZ'
+    app.config['VNPAY_URL'] = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
+    app.config['VNPAY_RETURN_URL'] = 'http://127.0.0.1:5000/vnpay_return'  # Sửa cho phù hợp domain của bạn
 
-    # Route cho book visit
-    @app.route('/book-visit', methods=['POST'])
-    def book_visit():
-        try:
-            name = request.form['visit_name']
-            email = request.form['visit_email']
-            phone = request.form['visit_phone']
-            address = request.form['visit_address']
-            visit_date = request.form['visit_date']
-            visit_time = request.form['visit_time']
-            garden_size = request.form['garden_size']
+    # # Route cho book visit
+    # @app.route('/book-visit', methods=['POST'])
+    # def book_visit():
+    #     try:
+    #         name = request.form['visit_name']
+    #         email = request.form['visit_email']
+    #         phone = request.form['visit_phone']
+    #         address = request.form['visit_address']
+    #         visit_date = request.form['visit_date']
+    #         visit_time = request.form['visit_time']
+    #         garden_size = request.form['garden_size']
             
-            # Lưu vào database
-            database = get_db()
-            database.execute(
-                'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, created_at, status)'
-                ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                (name, email, phone, address, visit_date, visit_time, garden_size, 
-                 datetime.now(), 'pending')
-            )
-            database.commit()
+    #         # Lưu vào database
+    #         database = get_db()
+    #         database.execute(
+    #             'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, created_at, status)'
+    #             ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    #             (name, email, phone, address, visit_date, visit_time, garden_size, 
+    #              datetime.now(), 'pending')
+    #         )
+    #         database.commit()
             
-            flash('Đặt lịch thành công! Chúng tôi sẽ liên hệ xác nhận trong thời gian sớm nhất.', 'success')
-            return redirect(url_for('expert_consultation'))
+    #         flash('Appointment successful! We will contact you for confirmation as soon as possible.', 'success')
+    #         return redirect(url_for('expert_consultation'))
             
-        except Exception as e:
-            flash('Có lỗi xảy ra. Vui lòng thử lại sau.', 'error')
-            return redirect(url_for('expert_consultation'))
+    #     except Exception as e:
+    #         flash('An error occurred. Please try again later.', 'error')
+    #         return redirect(url_for('expert_consultation'))
+    
+    @app.route('/book-visit-vnpay', methods=['POST'])
+    def book_visit_vnpay():
+        # Lấy dữ liệu từ form
+        name = request.form['visit_name']
+        email = request.form['visit_email']
+        phone = request.form['visit_phone']
+        address = request.form['visit_address']
+        visit_date = request.form['visit_date']
+        visit_time = request.form['visit_time']
+        garden_size = request.form['garden_size']
+        order_id = 'VISIT' + datetime.now().strftime('%Y%m%d%H%M%S')
+        price = 500000  # Giá cố định hoặc tuỳ logic
+
+        # Lưu vào DB với trạng thái pending và order_id
+        db = get_db()
+        db.execute(
+            'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            (name, email, phone, address, visit_date, visit_time, garden_size, 'pending')
+        )
+        db.commit()
+        order_desc = f"Schedule a home consultation #{order_id} for {name}"
+        vnp_url = build_vnpay_url(
+            order_id=order_id,
+            amount_usd=price,
+            order_desc=order_desc,
+            config=app.config,
+            user_ip=request.remote_addr
+        )
+        return redirect(vnp_url)
 
     # Route cho about
     @app.route('/about')
@@ -324,6 +360,55 @@ def create_app():
     def expert_chat():
         # Ở đây bạn có thể render một trang chat chuyên gia, tạm thời render template demo
         return render_template('expert_chat.html')
+    
+    from .vnpay_utils import build_vnpay_url
+
+    @app.route('/checkout-vnpay')
+    def checkout_vnpay():
+        cart = session.get('cart', [])
+        if not cart:
+            flash('Cart is empty!', 'error')
+            return redirect(url_for('cart'))
+        total = sum(float(item['price'].replace('$', '')) * item['quantity'] for item in cart)
+        order_id = 'ORDER' + datetime.now().strftime('%Y%m%d%H%M%S')
+        order_desc = f"Pay for order #{order_id}"
+        vnp_url = build_vnpay_url(
+            order_id=order_id,
+            amount_usd=total * 25000,  # Giả sử giá USD, đổi sang VND (tùy hệ thống bạn)
+            order_desc=order_desc,
+            config=app.config,
+            user_ip=request.remote_addr
+        )
+        # OPTIONAL: Lưu thông tin đơn hàng vào database với trạng thái "pending"
+        return redirect(vnp_url)
+    
+    @app.route('/vnpay_return')
+    def vnpay_return():
+        params = request.args
+        vnp_response_code = params.get('vnp_ResponseCode')
+        order_id = params.get('vnp_TxnRef')
+        db = get_db()
+
+        if order_id and order_id.startswith('VISIT'):
+            # Xử lý đặt lịch tư vấn
+            if vnp_response_code == '00':
+                db.execute("UPDATE visits SET status = 'paid' WHERE notes = ?", (order_id,))
+                db.commit()
+                flash('Payment successful! Booking confirmed.', 'success')
+            else:
+                flash('Payment failed or canceled.', 'error')
+            return redirect(url_for('expert_consultation'))
+        elif order_id and order_id.startswith('ORDER'):
+            # Xử lý đơn hàng pharmacy
+            if vnp_response_code == '00':
+                session['cart'] = []
+                flash('Order payment successful!', 'success')
+            else:
+                flash('Payment failed or canceled.', 'error')
+            return redirect(url_for('cart'))
+        else:
+            flash('Order type not determined!', 'error')
+            return redirect(url_for('home'))
 
     return app
 

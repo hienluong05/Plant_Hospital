@@ -101,3 +101,32 @@ CREATE TABLE chat_message (
     is_read BOOLEAN DEFAULT 0,
     FOREIGN KEY(session_id) REFERENCES chat_session(id)
 );
+
+-- Table lưu đơn mua thuốc
+CREATE TABLE IF NOT EXISTS orders (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  total REAL,
+  status TEXT DEFAULT 'pending', -- pending/paid/cancelled
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  order_id INTEGER,
+  product_name TEXT,
+  price REAL,
+  quantity INTEGER
+);
+
+-- Table lưu giao dịch thanh toán
+CREATE TABLE IF NOT EXISTS payments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  service_type TEXT, -- 'pharmacy', 'consultation'
+  service_id INTEGER, -- id của order hoặc booking
+  amount REAL,
+  status TEXT DEFAULT 'pending', -- pending/paid/failed
+  method TEXT, -- paypal, vnpay...
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
