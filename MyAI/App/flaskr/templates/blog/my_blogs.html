@@ -9,110 +9,52 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <style>
-      /* Copy/paste các style từ home.html để đồng bộ giao diện */
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #333;
-        background: #f9fafb;
+        background: linear-gradient(
+          135deg,
+          #d0f3e6 0%,
+          #4caf50 60%,
+          #a2c5f4 100%
+        );
         min-height: 100vh;
         margin: 0;
+        color: #333;
       }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-      /* Top Bar */
-      .top-bar {
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 10px 0;
-        font-size: 14px;
-      }
-      .top-bar .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .top-left span {
-        margin-right: 20px;
-      }
-      .top-left i {
-        margin-right: 5px;
-      }
-      .top-right {
-        display: flex;
-        align-items: center;
-      }
-      .user-welcome {
-        margin-right: 15px;
-        color: #4caf50;
-      }
-      .top-btn {
-        color: white;
-        text-decoration: none;
-        margin-left: 15px;
-        padding: 5px 10px;
-        border-radius: 3px;
-        transition: background-color 0.3s;
-      }
-      .top-btn:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-      /* Header */
-      .header {
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 12px 0;
+      .blog-header {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px 0;
+        box-shadow: 0 2px 18px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 24px 24px;
         position: sticky;
         top: 0;
         z-index: 100;
       }
-      .header .container {
+      .blog-header .container {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
       }
       .logo h1 {
         color: #4caf50;
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-weight: 700;
+        margin: 0;
       }
-      .main-nav ul {
-        display: flex;
-        list-style: none;
-        align-items: center;
-      }
-      .main-nav li {
-        margin: 0 20px;
-        position: relative;
-      }
-      .main-nav a {
-        color: #4caf50;
+      .blog-nav a {
+        color: #333;
         text-decoration: none;
+        margin-left: 22px;
         font-weight: 500;
-        transition: color 0.3s;
-        display: flex;
-        align-items: center;
+        transition: color 0.2s;
       }
-      .main-nav a:hover,
-      .main-nav a.active {
-        color: #388e3c;
+      .blog-nav a.active,
+      .blog-nav a:hover {
+        color: #4caf50;
       }
-      .enroll-btn {
-        background-color: #4caf50;
-        color: white;
-        padding: 12px 24px;
-        text-decoration: none;
-        border-radius: 25px;
-        font-weight: 600;
-        transition: all 0.3s;
-      }
-      .enroll-btn:hover {
-        background-color: #3d8b40;
-        transform: translateY(-2px);
-      }
-      /* Blog List */
       .main-content {
         max-width: 900px;
         margin: 40px auto 0 auto;
@@ -124,13 +66,19 @@
       .blog-title {
         text-align: center;
         color: #4caf50;
-        font-size: 2.3rem;
+        font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
+      }
+      .blog-desc {
+        text-align: center;
+        color: #555;
+        margin-bottom: 38px;
+        font-size: 1.1rem;
       }
       .blog-actions {
         text-align: right;
-        margin-bottom: 18px;
+        margin-bottom: 25px;
       }
       .btn-create {
         background: #4caf50;
@@ -172,7 +120,7 @@
         min-width: 0;
       }
       .blog-post-title {
-        font-size: 1.26rem;
+        font-size: 1.3rem;
         font-weight: 600;
         color: #222;
         margin-bottom: 7px;
@@ -258,65 +206,25 @@
     </style>
   </head>
   <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="container">
-        <div class="top-left">
-          <span><i class="fas fa-question-circle"></i> Have a question?</span>
-          <span><i class="fas fa-phone"></i> 0984987139</span>
-          <span
-            ><i class="fas fa-envelope"></i> ms.dangthihienluong@gmail.com</span
-          >
-        </div>
-        <div class="top-right">
-          {% if g.user %}
-          <span class="user-welcome">Welcome, {{ g.user.username }}!</span>
-          <a href="{{ url_for('auth.logout') }}" class="top-btn"
-            ><i class="fas fa-sign-out-alt"></i> Log Out</a
-          >
-          {% else %}
-          <a href="{{ url_for('auth.login') }}" class="top-btn"
-            ><i class="fas fa-sign-in-alt"></i> Log In</a
-          >
-          <a href="{{ url_for('auth.register') }}" class="top-btn"
-            ><i class="fas fa-user-plus"></i> Register</a
-          >
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-    <!-- Header Navigation -->
-    <header class="header">
+    <header class="blog-header">
       <div class="container">
         <div class="logo">
           <h1>Plant Hospital</h1>
         </div>
-        <nav class="main-nav">
-          <ul>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('ai_diagnosis') }}">AI Diagnosis</a></li>
-            <li><a href="{{ url_for('pharmacy') }}">Pharmacy</a></li>
-            <li>
-              <a href="{{ url_for('expert_consultation') }}"
-                >Expert Consultation</a
-              >
-            </li>
-            <li><a href="{{ url_for('blog.index') }}">Blog</a></li>
-            <li><a href="{{ url_for('about') }}">About</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
-          </ul>
+        <nav class="blog-nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('blog.index') }}">Blog</a>
+          <a href="{{ url_for('blog.my_blogs') }}" class="active">My Blogs</a>
+          <a href="{{ url_for('expert_consultation') }}">Expert</a>
         </nav>
-        <div class="header-cta">
-          <a href="{{ url_for('ai_diagnosis') }}" class="enroll-btn"
-            >START DIAGNOSIS</a
-          >
-        </div>
       </div>
     </header>
-
     <div class="main-content">
       <h2 class="blog-title"><i class="fas fa-user"></i> My Blog Posts</h2>
+      <div class="blog-desc">
+        Manage your posts, share your plant care experiences, and contribute to
+        the Plant Hospital community.
+      </div>
       <div class="blog-actions">
         <a href="{{ url_for('blog.create') }}" class="btn-create">
           <i class="fas fa-plus"></i> New Post
