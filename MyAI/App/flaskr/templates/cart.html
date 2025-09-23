@@ -210,9 +210,8 @@
             </tr>
           </thead>
           <tbody>
-            {% set total = 0 %} {% for item in cart %} {% set subtotal =
-            (item.price|replace('$','')|float) * item.quantity %} {% set total =
-            total + subtotal %}
+            {% for item in cart %} {% set subtotal =
+            (item.price|replace('$','')|float) * item.quantity %}
             <tr>
               <td>
                 <div class="cart-product">
@@ -243,7 +242,7 @@
             class="cart-checkout-btn"
             onclick="window.location.href='/checkout-vnpay'"
           >
-            <i class="fas fa-credit-card"></i>Pay
+            <i class="fas fa-credit-card"></i> Pay
           </button>
         </div>
         {% else %}

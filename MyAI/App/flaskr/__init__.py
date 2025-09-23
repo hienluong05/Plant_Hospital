@@ -213,7 +213,8 @@ def create_app():
     @app.route('/cart')
     def cart():
         cart = session.get("cart", [])
-        return render_template("cart.html", cart=cart)
+        total = sum(float(item['price'].replace('$','')) * item['quantity'] for item in cart)
+        return render_template("cart.html", cart=cart, total=total)
 
     @app.route('/remove-from-cart', methods=['POST'])
     def remove_from_cart():
