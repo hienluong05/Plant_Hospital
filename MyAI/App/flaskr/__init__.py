@@ -430,6 +430,19 @@ def create_app():
 
         flash('Order reference not recognized.', 'error')
         return redirect(url_for('home'))
+    
+    from .plant_data import plants
+
+    @app.route('/plants')
+    def plant_list():
+        return render_template('plants/list.html', plants=plants)
+
+    @app.route('/plants/<plant_id>')
+    def plant_detail(plant_id):
+        plant = next((p for p in plants if p["id"] == plant_id), None)
+        if not plant:
+            return "Plant not found!", 404
+        return render_template('plants/detail.html', plant=plant)
 
     return app
 
