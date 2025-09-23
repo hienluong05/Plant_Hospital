@@ -14,6 +14,7 @@ from flask_socketio import SocketIO
 from . import chat
 from flask import session, jsonify, request
 import feedparser
+from .vnpay_utils import build_vnpay_url, verify_vnpay_response
 
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
@@ -318,7 +319,6 @@ def create_app():
     
     @app.route('/book-visit-vnpay', methods=['POST'])
     def book_visit_vnpay():
-        # Lấy dữ liệu từ form
         name = request.form['visit_name']
         email = request.form['visit_email']
         phone = request.form['visit_phone']
@@ -326,20 +326,23 @@ def create_app():
         visit_date = request.form['visit_date']
         visit_time = request.form['visit_time']
         garden_size = request.form['garden_size']
-        order_id = 'VISIT' + datetime.now().strftime('%Y%m%d%H%M%S')
-        price = 500000  # Giá cố định hoặc tuỳ logic
 
-        # Lưu vào DB với trạng thái pending và order_id
+        order_id = 'VISIT' + datetime.now().strftime('%Y%m%d%H%M%S')
+        price_vnd = 500000  # VND trực tiếp
+
+        # Lưu visit, nhớ để notes=order_id để UPDATE được khi trả về
         db = get_db()
         db.execute(
-            'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            (name, email, phone, address, visit_date, visit_time, garden_size, 'pending')
+            "INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, status, notes) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (name, email, phone, address, visit_date, visit_time, garden_size, 'pending', order_id)
         )
         db.commit()
-        order_desc = f"Schedule a home consultation #{order_id} for {name}"
+
+        order_desc = f"Home consultation {order_id} for {name}"
         vnp_url = build_vnpay_url(
             order_id=order_id,
-            amount_usd=price,
+            amount_vnd=price_vnd,
             order_desc=order_desc,
             config=app.config,
             user_ip=request.remote_addr
@@ -369,46 +372,63 @@ def create_app():
         if not cart:
             flash('Cart is empty!', 'error')
             return redirect(url_for('cart'))
-        total = sum(float(item['price'].replace('$', '')) * item['quantity'] for item in cart)
+
+        # Tổng USD hiện đang lưu dạng "$xx.yy"
+        total_usd = sum(float(item['price'].replace('$', '')) * item['quantity'] for item in cart)
+
+        # Đổi sang VND 1 lần (cố định 25,000 hoặc nếu bạn có API thì dùng)
+        RATE = 25000
+        total_vnd = int(round(total_usd * RATE))
+
         order_id = 'ORDER' + datetime.now().strftime('%Y%m%d%H%M%S')
-        order_desc = f"Pay for order #{order_id}"
+        # (Khuyến nghị) Lưu đơn hàng vào DB orders để đối chiếu khi return:
+        db = get_db()
+        db.execute("INSERT INTO orders (user_id, total, status) VALUES (?, ?, ?)",
+                (g.user['id'] if getattr(g, 'user', None) else None,
+                    total_usd,
+                    'pending'))
+        db.commit()
+
+        order_desc = f"Pay order {order_id}"
         vnp_url = build_vnpay_url(
             order_id=order_id,
-            amount_usd=total * 25000,  # Giả sử giá USD, đổi sang VND (tùy hệ thống bạn)
+            amount_vnd=total_vnd,
             order_desc=order_desc,
             config=app.config,
             user_ip=request.remote_addr
         )
-        # OPTIONAL: Lưu thông tin đơn hàng vào database với trạng thái "pending"
         return redirect(vnp_url)
-    
+        
     @app.route('/vnpay_return')
     def vnpay_return():
-        params = request.args
+        params = request.args.to_dict()
+        if not verify_vnpay_response(params, app.config):
+            flash('Invalid signature!', 'error')
+            return redirect(url_for('home'))
+
         vnp_response_code = params.get('vnp_ResponseCode')
         order_id = params.get('vnp_TxnRef')
         db = get_db()
 
         if order_id and order_id.startswith('VISIT'):
-            # Xử lý đặt lịch tư vấn
             if vnp_response_code == '00':
-                db.execute("UPDATE visits SET status = 'paid' WHERE notes = ?", (order_id,))
+                db.execute("UPDATE visits SET status='paid' WHERE notes=?", (order_id,))
                 db.commit()
                 flash('Payment successful! Booking confirmed.', 'success')
             else:
                 flash('Payment failed or canceled.', 'error')
             return redirect(url_for('expert_consultation'))
-        elif order_id and order_id.startswith('ORDER'):
-            # Xử lý đơn hàng pharmacy
+
+        if order_id and order_id.startswith('ORDER'):
             if vnp_response_code == '00':
                 session['cart'] = []
                 flash('Order payment successful!', 'success')
             else:
                 flash('Payment failed or canceled.', 'error')
             return redirect(url_for('cart'))
-        else:
-            flash('Order type not determined!', 'error')
-            return redirect(url_for('home'))
+
+        flash('Order reference not recognized.', 'error')
+        return redirect(url_for('home'))
 
     return app
 
