@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tư vấn chuyên gia - Plant Hospital</title>
+    <title>Expert consultation - Plant Hospital</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -276,28 +276,28 @@
         <div class="collapse navbar-collapse" id="navbarMenu">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('home') }}">Trang chủ</a>
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('about') }}">Giới thiệu</a>
+              <a class="nav-link" href="{{ url_for('about') }}">Introduction</a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link active"
                 href="{{ url_for('expert_consultation') }}"
-                >Tư vấn chuyên gia</a
+                >Expert consultation</a
               >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('ai_diagnosis') }}"
-                >Chẩn đoán AI</a
+                >AI diseases diagnosis</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('pharmacy') }}">Nhà thuốc</a>
+              <a class="nav-link" href="{{ url_for('pharmacy') }}">Pharmacy</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('contact') }}">Liên hệ</a>
+              <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
             </li>
           </ul>
         </div>
@@ -313,12 +313,12 @@
       />
       <div class="container hero-content">
         <h1 class="hero-title">
-          Tư vấn chuyên gia <span style="color: #ffe082">cho cây trồng</span>
+          Expert consultation <span style="color: #ffe082">for plants</span>
         </h1>
         <p class="hero-desc">
-          Kết nối với các chuyên gia bảo vệ thực vật hàng đầu, nhận tư vấn trực
-          tuyến, đặt lịch khám tại nhà và giải đáp mọi vấn đề về bệnh cây trồng
-          của bạn.
+          Connect with leading plant protection experts, get online
+          consultations, book home visits and get all your plant disease
+          problems answered.
         </p>
         <div class="hero-btns">
           <button
@@ -326,21 +326,21 @@
             data-bs-toggle="modal"
             data-bs-target="#questionModal"
           >
-            <i class="fas fa-question-circle"></i> Đặt câu hỏi miễn phí
+            <i class="fas fa-question-circle"></i> Ask a free question
           </button>
           <button
             class="btn btn-outline-light"
             data-bs-toggle="modal"
             data-bs-target="#visitModal"
           >
-            <i class="fas fa-home"></i> Đặt lịch tư vấn tại nhà
+            <i class="fas fa-home"></i> Schedule a home consultation
           </button>
           <button
             class="btn btn-outline-light"
             data-bs-toggle="modal"
             data-bs-target="#chatModal"
           >
-            <i class="fas fa-comments"></i> Chat trực tuyến
+            <i class="fas fa-comments"></i> Chat online
           </button>
         </div>
       </div>
@@ -349,7 +349,7 @@
     <!-- Dịch vụ tư vấn -->
     <section class="container py-5">
       <h2 class="text-center mb-4" style="color: #4caf50; font-weight: 700">
-        <i class="fas fa-leaf"></i> Gói dịch vụ tư vấn
+        <i class="fas fa-leaf"></i> Consulting service package
       </h2>
       <div class="row g-4">
         <!-- Gói 1 -->
@@ -359,13 +359,18 @@
               <div class="service-icon">
                 <i class="fas fa-question-circle"></i>
               </div>
-              <h5 class="card-title">Đặt câu hỏi miễn phí</h5>
-              <div class="service-price">Miễn phí</div>
+              <h5 class="card-title">Ask a free question</h5>
+              <div class="service-price">Free</div>
               <ul class="service-features">
-                <li><i class="fas fa-check"></i> Phản hồi trong 24-48h</li>
-                <li><i class="fas fa-check"></i> Gửi kèm hình ảnh</li>
-                <li><i class="fas fa-check"></i> Tư vấn qua email</li>
-                <li><i class="fas fa-check"></i> Không giới hạn số câu hỏi</li>
+                <li>
+                  <i class="fas fa-check"></i> Response within 24-48 hours
+                </li>
+                <li><i class="fas fa-check"></i> Attach images</li>
+                <li><i class="fas fa-check"></i> Consulting via email</li>
+                <li>
+                  <i class="fas fa-check"></i> Unlimited number of questions
+                </li>
+                <li><i class="fas fa-check"></i> Basic consulting</li>
               </ul>
               <div class="service-action-row mt-auto">
                 <button
@@ -373,7 +378,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#questionModal"
                 >
-                  Đặt câu hỏi
+                  Ask a question
                 </button>
               </div>
             </div>
@@ -384,13 +389,13 @@
           <div class="card service-card h-100 d-flex flex-column">
             <div class="card-body d-flex flex-column">
               <div class="service-icon"><i class="fas fa-comments"></i></div>
-              <h5 class="card-title">Chat trực tiếp chuyên gia</h5>
-              <div class="service-price">50.000đ / 30 phút</div>
+              <h5 class="card-title">Chat directly with an expert</h5>
+              <div class="service-price">50.000đ / 30 minutes</div>
               <ul class="service-features">
-                <li><i class="fas fa-check"></i> Chat thời gian thực</li>
-                <li><i class="fas fa-check"></i> Gửi ảnh trực tiếp</li>
-                <li><i class="fas fa-check"></i> Tư vấn cá nhân hóa</li>
-                <li><i class="fas fa-check"></i> Lưu lịch sử chat</li>
+                <li><i class="fas fa-check"></i> Real-time chat</li>
+                <li><i class="fas fa-check"></i> Send image directly</li>
+                <li><i class="fas fa-check"></i> Personalized consulting</li>
+                <li><i class="fas fa-check"></i> Save chat history</li>
               </ul>
               <div class="service-action-row mt-auto">
                 <button
@@ -398,7 +403,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#chatModal"
                 >
-                  Bắt đầu chat
+                  Start chat
                 </button>
               </div>
             </div>
@@ -409,15 +414,16 @@
           <div class="card service-card h-100 d-flex flex-column">
             <div class="card-body d-flex flex-column">
               <div class="service-icon"><i class="fas fa-user-md"></i></div>
-              <h5 class="card-title">Tư vấn tại nhà</h5>
-              <div class="service-price">500.000đ / lần</div>
+              <h5 class="card-title">Home consulting</h5>
+              <div class="service-price">500.000đ / time</div>
               <ul class="service-features">
-                <li><i class="fas fa-check"></i> Chuyên gia đến tận vườn</li>
+                <li><i class="fas fa-check"></i> Experts come to the garden</li>
+                <li><i class="fas fa-check"></i> Overall plant check</li>
                 <li>
-                  <i class="fas fa-check"></i> Kiểm tra tổng thể cây trồng
+                  <i class="fas fa-check"></i> Report, treatment instructions
                 </li>
                 <li>
-                  <i class="fas fa-check"></i> Báo cáo, hướng dẫn điều trị
+                  <i class="fas fa-check"></i> Monitoring the treatment process
                 </li>
               </ul>
               <div class="service-action-row mt-auto">
@@ -426,7 +432,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#visitModal"
                 >
-                  Đặt lịch hẹn
+                  Make an appointment
                 </button>
               </div>
             </div>
@@ -438,29 +444,29 @@
     <!-- Quy trình tư vấn -->
     <section class="container py-5">
       <h2 class="text-center mb-4" style="color: #4caf50">
-        <i class="fas fa-route"></i> Quy trình tư vấn
+        <i class="fas fa-route"></i> Consulting process
       </h2>
       <div class="row stepper justify-content-center">
         <div class="col-md-4 step">
           <div class="step-number">1</div>
-          <div class="step-title">Gửi thông tin cây bệnh</div>
+          <div class="step-title">Send information about diseased plants</div>
           <div class="step-desc">
-            Điền form với mô tả triệu chứng, đính kèm hình ảnh, chọn loại cây.
+            Fill out the form with a description of the symptoms, attach a
+            picture, and select the plant type.
           </div>
         </div>
         <div class="col-md-4 step">
           <div class="step-number">2</div>
-          <div class="step-title">Chuyên gia phản hồi</div>
+          <div class="step-title">Expert responses</div>
           <div class="step-desc">
-            Đội ngũ chuyên gia phân tích và gửi phản hồi chi tiết qua email hoặc
-            chat.
+            Our team of experts analyze and send detailed feedback via email.
           </div>
         </div>
         <div class="col-md-4 step">
           <div class="step-number">3</div>
-          <div class="step-title">Nhận giải pháp điều trị</div>
+          <div class="step-title">Get treatment</div>
           <div class="step-desc">
-            Nhận hướng dẫn chăm sóc, phòng ngừa và xử lý bệnh từ chuyên gia.
+            Get expert guidance on care, prevention, and treatment.
           </div>
         </div>
       </div>
@@ -715,7 +721,7 @@
         <div class="row align-items-center mb-2">
           <div class="col-md-4 mb-2 mb-md-0">
             <strong><i class="fas fa-seedling"></i> Plant Hospital</strong>
-            <span class="ms-2">Chăm sóc cây trồng cùng chuyên gia</span>
+            <span class="ms-2">Plant care with experts</span>
           </div>
           <div class="col-md-4 mb-2 mb-md-0 text-center">
             <i class="fas fa-phone"></i> 0984 987 139 &nbsp;
