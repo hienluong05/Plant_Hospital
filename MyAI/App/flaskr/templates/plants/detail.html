@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ plant.name }} - Plant Encyclopedia</title>
+    <title>{{ plant.name }} - Plant Details</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -15,113 +15,137 @@
         margin: 0;
         color: #222;
       }
-      .hero-detail {
+      .hero {
         background: linear-gradient(100deg, #4caf50 55%, #a2c5f4 100%);
         color: #fff;
-        padding: 66px 0 30px 0;
+        padding: 70px 0 48px 0;
         text-align: center;
         position: relative;
         overflow: hidden;
       }
       .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.7rem;
         font-weight: 700;
-        margin-bottom: 11px;
+        margin-bottom: 10px;
         letter-spacing: 1px;
       }
       .hero-desc {
-        font-size: 1.13rem;
-        margin-bottom: 12px;
+        font-size: 1.19rem;
+        margin-bottom: 34px;
         opacity: 0.93;
       }
-      .back-btn {
+      .hero-btns {
+        margin-top: 10px;
+      }
+      .hero-btn {
         display: inline-block;
         background: #fff;
         color: #4caf50;
-        border-radius: 20px;
-        padding: 10px 26px;
+        border-radius: 25px;
+        padding: 15px 34px;
+        margin: 0 8px;
         font-weight: bold;
-        font-size: 1.08rem;
-        letter-spacing: 0.2px;
+        font-size: 1.05rem;
+        letter-spacing: 0.4px;
         border: none;
-        box-shadow: 0 2px 10px #4caf5040;
+        box-shadow: 0 2px 10px #4caf5030;
         transition: background 0.18s, color 0.18s;
         cursor: pointer;
         text-decoration: none;
-        margin-bottom: 8px;
       }
-      .back-btn:hover {
+      .hero-btn:hover {
         background: #2196f3;
         color: #fff;
       }
       .plant-detail-section {
-        max-width: 950px;
-        margin: -55px auto 38px auto;
-        background: #fff;
-        border-radius: 28px;
-        box-shadow: 0 6px 38px #a2c5f430;
-        padding: 48px 40px 36px 40px;
+        background: #f8fff8;
+        margin-top: -50px;
+        border-radius: 35px 35px 0 0;
+        box-shadow: 0 -2px 22px rgba(76, 175, 80, 0.06);
+        padding: 58px 0 56px 0;
+        min-height: 60vh;
         display: flex;
-        gap: 55px;
-        align-items: flex-start;
-        flex-wrap: wrap;
+        justify-content: center;
       }
-      .plant-img-block {
-        flex-shrink: 0;
-        width: 260px;
+      .plant-card-detail {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 5px 28px #a2c5f425;
+        padding: 38px 32px 32px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+        border: 1.5px solid #e0ebe8;
+        position: relative;
+        overflow: hidden;
+      }
+      .plant-card-detail img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 22px;
+        margin-bottom: 18px;
+        background: #f7faf7;
+        box-shadow: 0 2px 11px #4caf5020;
+        border: 2.5px solid #e8f5e9;
+        transition: filter 0.2s;
+      }
+      .plant-card-detail h3 {
+        margin: 0 0 4px 0;
+        color: #4caf50;
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .plant-card-detail .plant-sci {
+        color: #2196f3;
+        font-size: 1.12rem;
+        font-style: italic;
+        margin-bottom: 10px;
+      }
+      .plant-card-detail .plant-desc {
+        color: #444;
+        margin-bottom: 16px;
+        min-height: 40px;
+        font-size: 1.07rem;
+        line-height: 1.5;
+        text-align: center;
+        opacity: 0.93;
+      }
+      .plant-attr {
+        color: #222;
+        font-size: 1.05rem;
+        margin-bottom: 8px;
         text-align: center;
       }
-      .plant-img-block img {
-        width: 210px;
-        height: 210px;
-        border-radius: 22px;
-        object-fit: cover;
-        box-shadow: 0 4px 22px #4caf5040;
-        border: 3px solid #e8f5e9;
-        background: #fcfcfc;
-        margin-bottom: 16px;
-      }
-      .plant-img-block .plant-origin {
-        margin-top: 4px;
-        color: #2196f3;
-        font-size: 1.01rem;
-        font-style: italic;
-      }
-      .plant-info-block {
-        flex: 1 1 350px;
-        min-width: 0;
-      }
-      .plant-info-block .plant-desc {
-        color: #444;
-        font-size: 1.11rem;
-        margin-bottom: 19px;
-        line-height: 1.7;
-      }
-      .plant-info-block .plant-attr {
-        margin-bottom: 10px;
-        color: #444;
-        font-size: 1.01rem;
-      }
-      .plant-info-block .plant-attr strong {
+      .plant-attr strong {
         color: #388e3c;
         font-weight: 600;
       }
       .info-group {
-        margin-bottom: 20px;
+        margin-top: 18px;
+        width: 100%;
       }
       .info-title {
         color: #2196f3;
         font-weight: 700;
         font-size: 1.13rem;
-        margin-bottom: 9px;
+        margin-bottom: 7px;
         letter-spacing: 0.17px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
       .info-list {
-        margin: 0 0 0 20px;
+        margin: 0 0 0 22px;
         padding: 0;
         color: #333;
         line-height: 1.7;
         font-size: 1.05rem;
+        text-align: left;
       }
       .info-list li {
         margin-bottom: 6px;
@@ -149,64 +173,95 @@
         color: #388e3c;
         font-size: 1.02em;
       }
-      @media (max-width: 900px) {
-        .plant-detail-section {
-          flex-direction: column;
-          gap: 27px;
-          padding: 19px 7vw 19px 7vw;
-        }
-        .plant-img-block {
-          width: 100%;
-          margin: 0 auto;
-        }
-        .plant-img-block img {
-          width: 140px;
-          height: 140px;
-        }
+      .detail-back-btn {
+        margin-top: 18px;
+        background: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 28px;
+        font-weight: 600;
+        font-size: 1.07rem;
+        text-decoration: none;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 10px #4caf5030;
+        display: inline-block;
+        letter-spacing: 0.4px;
+        margin-bottom: 8px;
       }
-      @media (max-width: 540px) {
-        .hero-title {
-          font-size: 1.35rem;
+      .detail-back-btn:hover {
+        background: #2196f3;
+        color: #fff;
+      }
+      @media (max-width: 700px) {
+        .hero {
+          padding: 30px 0 18px 0;
         }
         .plant-detail-section {
-          border-radius: 0;
-          padding: 4vw 0;
+          padding: 22px 0 28px 0;
+          border-radius: 12px;
         }
-        .plant-img-block img {
+        .plant-card-detail {
+          padding: 14px 5vw 18px 5vw;
+          border-radius: 12px;
+          min-width: 0;
+        }
+        .plant-card-detail img {
           width: 90px;
           height: 90px;
+        }
+        .info-list {
+          margin-left: 12px;
         }
       }
     </style>
   </head>
   <body>
     <!-- Hero Section -->
-    <div class="hero-detail">
-      <a href="{{ url_for('plant_list') }}" class="back-btn">
-        <i class="fas fa-arrow-left"></i> Back to List
-      </a>
-      <div class="hero-title">{{ plant.name }}</div>
-      <div class="hero-desc">{{ plant.scientific_name }}</div>
-    </div>
+    <section class="hero">
+      <div class="hero-title">
+        <i class="fas fa-seedling"></i> Plant Encyclopedia
+      </div>
+      <div class="hero-desc">
+        Discover detailed information, care instructions, and common diseases
+        for popular crops.<br />
+        Learn, grow, and keep your plants healthy!
+      </div>
+      <div class="hero-btns">
+        <a href="{{ url_for('plant_list') }}" class="hero-btn"
+          ><i class="fas fa-arrow-left"></i> Back to List</a
+        >
+        <a
+          href="{{ url_for('home') }}"
+          class="hero-btn"
+          style="background: #4caf50; color: #fff"
+          ><i class="fas fa-home"></i> Back to Home</a
+        >
+      </div>
+    </section>
     <!-- Detail Section -->
-    <div class="plant-detail-section">
-      <div class="plant-img-block">
+    <section class="plant-detail-section">
+      <div class="plant-card-detail">
         <img
           src="{{ url_for('static', filename=plant.image) }}"
           alt="{{ plant.name }}"
         />
-        <div class="plant-origin">
-          <i class="fas fa-globe"></i> {{ plant.origin }}
-        </div>
-      </div>
-      <div class="plant-info-block">
+        <h3>{{ plant.name }}</h3>
+        <div class="plant-sci">{{ plant.scientific_name }}</div>
         <div class="plant-desc">{{ plant.description }}</div>
+        {% if plant.growth_cycle %}
         <div class="plant-attr">
           <strong>Growth Cycle:</strong> {{ plant.growth_cycle }}
         </div>
+        {% endif %} {% if plant.nutrition %}
         <div class="plant-attr">
           <strong>Nutrition:</strong> {{ plant.nutrition }}
         </div>
+        {% endif %} {% if plant.origin %}
+        <div class="plant-attr">
+          <strong>Origin:</strong> {{ plant.origin }}
+        </div>
+        {% endif %}
         <div class="info-group">
           <div class="info-title">
             <i class="fas fa-hands-wash"></i> How to Care
@@ -233,7 +288,10 @@
           </div>
           {% endfor %}
         </div>
+        <a href="{{ url_for('plant_list') }}" class="detail-back-btn"
+          ><i class="fas fa-arrow-left"></i> Back to List</a
+        >
       </div>
-    </div>
+    </section>
   </body>
 </html>
