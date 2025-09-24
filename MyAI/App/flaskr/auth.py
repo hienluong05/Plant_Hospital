@@ -88,7 +88,7 @@ def login_expert():
             session['expert_id'] = expert['id']
             session['is_expert'] = True
             session['username'] = expert['name']
-            return redirect(url_for('expert_chat'))
+            return redirect(url_for('expert_dashboard'))
     return render_template('auth/expert_login.html', error=error)  # Đúng với tên file template
 
 @bp.before_app_request

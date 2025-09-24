@@ -133,6 +133,10 @@ def create_app():
     # Đăng ký blueprint blog
     from . import blog
     app.register_blueprint(blog.bp)
+    
+    # Đnawg ký blueprint expert
+    from . import expert
+    app.register_blueprint(expert.bp)
 
     # Helper function để get database
     def get_db():
@@ -345,8 +349,33 @@ def create_app():
         if not plant:
             return "Plant not found!", 404
         return render_template('plants/detail.html', plant=plant)
+    
+    @app.route('/expert/dashboard')
+    def expert_dashboard():
+        # Lấy thông tin thống kê cơ bản từ DB (ví dụ demo)
+        db = get_db()
+        expert_id = session.get('expert_id')
+        if not expert_id:
+            return redirect(url_for('auth.login_expert'))
+
+        # Thống kê số câu hỏi chờ, lịch hẹn sắp tới, chat, rating
+        pending_questions = db.execute('SELECT COUNT(*) FROM questions WHERE status="pending"').fetchone()[0]
+        upcoming_visits = db.execute('SELECT COUNT(*) FROM visits WHERE status="pending"').fetchone()[0]
+        active_chats = 1  # Có thể thêm logic đếm phiên chat thực tế
+        rating = db.execute('SELECT rating FROM experts WHERE id=?', (expert_id,)).fetchone()
+        rating = rating[0] if rating else 5.0
+
+        expert_name = session.get("username", "Expert")
+        stats = {
+            "pending_questions": pending_questions,
+            "upcoming_visits": upcoming_visits,
+            "active_chats": active_chats,
+            "rating": rating,
+        }
+        return render_template('expert/dashboard.html', expert_name=expert_name, stats=stats)
 
     return app
+
 
 
 

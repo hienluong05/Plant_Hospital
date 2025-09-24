@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expert Dashboard | Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(120deg, #e3f2fd 0%, #e8f5e9 100%);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        color: #333;
+      }
+      .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 260px;
+        background: linear-gradient(
+          135deg,
+          #257c36 0%,
+          #388e3c 50%,
+          #1976d2 100%
+        );
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        padding: 28px 0;
+        box-shadow: 2px 0 18px #2196f322;
+      }
+      .sidebar .logo {
+        font-size: 1.7rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 36px;
+        letter-spacing: 1px;
+        color: #fff;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+      .sidebar a {
+        color: #fff;
+        text-decoration: none;
+        padding: 13px 36px;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        border-left: 4px solid transparent;
+        transition: background 0.18s, border 0.18s, color 0.18s;
+      }
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: #fff;
+        color: #1976d2;
+        border-left: 4px solid #ff9800;
+        font-weight: 600;
+      }
+      .sidebar .sidebar-footer {
+        margin-top: auto;
+        text-align: center;
+        font-size: 0.95rem;
+        color: #eee;
+        padding: 20px 0 0 0;
+      }
+      .main-content {
+        flex: 1;
+        padding: 38px 5vw 0 5vw;
+        background: linear-gradient(120deg, #fffde7 0%, #f8fff8 100%);
+        min-height: 100vh;
+      }
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 38px;
+      }
+      .dashboard-header .welcome {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1976d2;
+      }
+      .dashboard-header .logout-btn {
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 23px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        text-decoration: none;
+      }
+      .dashboard-header .logout-btn:hover {
+        background: #e68900;
+      }
+      .cards-row {
+        display: flex;
+        gap: 38px;
+        flex-wrap: wrap;
+        margin-bottom: 48px;
+      }
+      .summary-card {
+        flex: 1 1 220px;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px #388e3c11;
+        padding: 32px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 220px;
+        min-height: 120px;
+        position: relative;
+        overflow: hidden;
+        transition: box-shadow 0.2s, transform 0.2s;
+        margin-bottom: 0;
+      }
+      .summary-card:hover {
+        box-shadow: 0 7px 32px #2196f320;
+        transform: translateY(-4px) scale(1.02);
+      }
+      /* Phân biệt các card bằng màu nền khác nhau */
+      .summary-card.card-green {
+        background: linear-gradient(120deg, #e8f5e9 80%, #b2dfdb 100%);
+        border-left: 7px solid #43a047;
+      }
+      .summary-card.card-blue {
+        background: linear-gradient(120deg, #e3f2fd 80%, #bbdefb 100%);
+        border-left: 7px solid #1976d2;
+      }
+      .summary-card.card-orange {
+        background: linear-gradient(120deg, #fff3e0 80%, #ffe0b2 100%);
+        border-left: 7px solid #ff9800;
+      }
+      .summary-card.card-purple {
+        background: linear-gradient(120deg, #f3e5f5 80%, #e1bee7 100%);
+        border-left: 7px solid #8e24aa;
+      }
+      .summary-card .card-icon {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        color: inherit;
+        opacity: 0.92;
+      }
+      .summary-card.card-green .card-icon {
+        color: #388e3c;
+      }
+      .summary-card.card-blue .card-icon {
+        color: #1976d2;
+      }
+      .summary-card.card-orange .card-icon {
+        color: #ff9800;
+      }
+      .summary-card.card-purple .card-icon {
+        color: #8e24aa;
+      }
+      .summary-card .card-title {
+        font-size: 1.13rem;
+        font-weight: 600;
+        margin-bottom: 7px;
+        color: #222;
+      }
+      .summary-card .card-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1976d2;
+        margin-bottom: 5px;
+      }
+      .summary-card.card-green .card-value {
+        color: #388e3c;
+      }
+      .summary-card.card-orange .card-value {
+        color: #ff9800;
+      }
+      .summary-card.card-purple .card-value {
+        color: #8e24aa;
+      }
+      .summary-card .card-link {
+        font-size: 0.97rem;
+        color: #388e3c;
+        text-decoration: underline;
+        margin-top: 7px;
+        cursor: pointer;
+      }
+      .summary-card .card-link:hover {
+        color: #1976d2;
+      }
+      .info-box {
+        background: #e3f2fd;
+        border-radius: 12px;
+        padding: 22px 24px;
+        margin-bottom: 20px;
+        color: #1976d2;
+        font-size: 1.07rem;
+        font-weight: 500;
+      }
+      @media (max-width: 900px) {
+        .dashboard-container {
+          flex-direction: column;
+        }
+        .sidebar {
+          flex-direction: row;
+          width: 100%;
+          height: auto;
+          padding: 10px 0;
+          justify-content: flex-start;
+        }
+        .sidebar nav {
+          flex-direction: row;
+          gap: 0;
+        }
+        .sidebar a {
+          padding: 10px 15px;
+          border-left: none;
+          border-bottom: 3px solid transparent;
+        }
+        .sidebar a.active,
+        .sidebar a:hover {
+          border-bottom: 3px solid #ff9800;
+          border-left: none;
+        }
+        .main-content {
+          padding: 18px 3vw 0 3vw;
+        }
+        .cards-row {
+          flex-direction: column;
+          gap: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="logo"><i class="fas fa-user-md"></i> Expert Panel</div>
+        <nav>
+          <a href="{{ url_for('expert_dashboard') }}" class="active"
+            ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+          >
+          <a href="{{ url_for('expert.questions') }}"
+            ><i class="fas fa-question-circle"></i> Q&A Management</a
+          >
+          <a href="{{ url_for('home') }}"
+            ><i class="fas fa-calendar-alt"></i> Home Visits</a
+          >
+          <a href="#"><i class="fas fa-comments"></i> Chat with Users</a>
+          <a href="#"><i class="fas fa-user"></i> Profile</a>
+        </nav>
+        <div class="sidebar-footer">&copy; 2025 Plant Hospital</div>
+      </aside>
+      <main class="main-content">
+        <div class="dashboard-header">
+          <div class="welcome">
+            <i class="fas fa-seedling"></i> Welcome, {{ expert_name or "Expert"
+            }}!
+          </div>
+          <a href="{{ url_for('auth.logout') }}" class="logout-btn"
+            ><i class="fas fa-sign-out-alt"></i> Logout</a
+          >
+        </div>
+
+        <div class="cards-row">
+          <div class="summary-card card-green">
+            <span class="card-icon"
+              ><i class="fas fa-question-circle"></i
+            ></span>
+            <div class="card-title">Questions Pending</div>
+            <div class="card-value">{{ stats.pending_questions or 0 }}</div>
+            <a href="#" class="card-link">Review questions</a>
+          </div>
+          <div class="summary-card card-orange">
+            <span class="card-icon"><i class="fas fa-calendar-alt"></i></span>
+            <div class="card-title">Upcoming Visits</div>
+            <div class="card-value">{{ stats.upcoming_visits or 0 }}</div>
+            <a href="#" class="card-link">View schedules</a>
+          </div>
+          <div class="summary-card card-blue">
+            <span class="card-icon"><i class="fas fa-comments"></i></span>
+            <div class="card-title">Active Chats</div>
+            <div class="card-value">{{ stats.active_chats or 0 }}</div>
+            <a href="#" class="card-link">Join chat</a>
+          </div>
+          <div class="summary-card card-purple">
+            <span class="card-icon"><i class="fas fa-star"></i></span>
+            <div class="card-title">Average Rating</div>
+            <div class="card-value">{{ stats.rating or "5.0" }}</div>
+            <span class="card-link" style="color: #aaa; cursor: default"
+              >Updated monthly</span
+            >
+          </div>
+        </div>
+
+        <div class="info-box">
+          <i class="fas fa-info-circle"></i>
+          Use the menu to manage user questions, appointments, chat or view your
+          profile. This is your centralized dashboard for all expert activities.
+        </div>
+        <!-- Có thể thêm các bảng thống kê, thông báo mới, v.v. ở đây -->
+      </main>
+    </div>
+  </body>
+</html>
