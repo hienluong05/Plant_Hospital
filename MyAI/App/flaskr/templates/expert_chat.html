@@ -140,27 +140,25 @@
       function displayMessage(data) {
         const container = document.getElementById("chatContainer");
         const messageDiv = document.createElement("div");
-
         let messageClass = "other-message";
-        if (data.is_expert) {
+        if (data.is_expert || data.sender_type === "expert") {
           messageClass = "expert-message";
         }
-
         messageDiv.className = `message ${messageClass}`;
-
-        let html = `<strong>${data.user_name}:</strong>`;
-        if (data.message) {
-          html += `<div>${data.message}</div>`;
+        let html = `<strong>${
+          data.sender_name || data.user_name || "Unknown"
+        }:</strong>`;
+        if (data.content || data.message) {
+          html += `<div>${data.content || data.message}</div>`;
         }
         if (data.image_path) {
           html += `<img src="/static/${data.image_path}" alt="Shared image" class="img-fluid">`;
         }
-        html += `<div class="timestamp">${data.timestamp}</div>`;
-
+        html += `<div class="timestamp">${data.timestamp || ""}</div>`;
         messageDiv.innerHTML = html;
         container.appendChild(messageDiv);
+        scrollToBottom();
       }
-
       function sendMessage() {
         const input = document.getElementById("messageInput");
         const message = input.value.trim();
