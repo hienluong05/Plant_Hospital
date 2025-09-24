@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flaskr.db import get_db
+from flaskr.chat import socketio
 
 bp = Blueprint('expert', __name__, url_prefix='/expert')
 
@@ -114,4 +115,4 @@ def chat_session_detail(session_id):
             db.commit()
             return redirect(url_for('expert.chat_session_detail', session_id=session_id))
 
-    return render_template('expert/chat_session_detail.html', session=session_info, messages=messages)
+    return render_template('expert/expert_realtime_chat.html', session=session_info, messages=messages)
