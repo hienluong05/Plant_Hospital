@@ -14,7 +14,7 @@ from flask_socketio import SocketIO
 from . import chat
 from flask import session, jsonify, request
 import feedparser
-from .vnpay_utils import build_vnpay_url, verify_vnpay_response
+import paypalrestsdk
 
 def get_class_names_from_folder(dataset_dir):
     class_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
@@ -283,73 +283,41 @@ def create_app():
             flash('An error occurred. Please try again later.', 'error')
             return redirect(url_for('expert_consultation'))
     
-    # Config vnpay
-    app.config['VNPAY_TMN_CODE'] = 'MQ6F4LQX' # Lấy từ VNPay
-    app.config['VNPAY_HASH_SECRET'] = 'B5ZAH92LELL58F9544OUQOEQNIH07DJZ'
-    app.config['VNPAY_URL'] = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
-    app.config['VNPAY_RETURN_URL'] = 'http://127.0.0.1:5000/vnpay_return'  # Sửa cho phù hợp domain của bạn
+    # paypalrestsdk.configure({
+    #     "mode": "sandbox",  # "live" cho production
+    #     "client_id": "YOUR_PAYPAL_CLIENT_ID",
+    #     "client_secret": "YOUR_PAYPAL_CLIENT_SECRET"
+    # })
 
-    # # Route cho book visit
-    # @app.route('/book-visit', methods=['POST'])
-    # def book_visit():
-    #     try:
-    #         name = request.form['visit_name']
-    #         email = request.form['visit_email']
-    #         phone = request.form['visit_phone']
-    #         address = request.form['visit_address']
-    #         visit_date = request.form['visit_date']
-    #         visit_time = request.form['visit_time']
-    #         garden_size = request.form['garden_size']
+    # Route cho book visit
+    @app.route('/book-visit', methods=['POST'])
+    def book_visit():
+        try:
+            name = request.form['visit_name']
+            email = request.form['visit_email']
+            phone = request.form['visit_phone']
+            address = request.form['visit_address']
+            visit_date = request.form['visit_date']
+            visit_time = request.form['visit_time']
+            garden_size = request.form['garden_size']
             
-    #         # Lưu vào database
-    #         database = get_db()
-    #         database.execute(
-    #             'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, created_at, status)'
-    #             ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    #             (name, email, phone, address, visit_date, visit_time, garden_size, 
-    #              datetime.now(), 'pending')
-    #         )
-    #         database.commit()
+            # Lưu vào database
+            database = get_db()
+            database.execute(
+                'INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, created_at, status)'
+                ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (name, email, phone, address, visit_date, visit_time, garden_size, 
+                 datetime.now(), 'pending')
+            )
+            database.commit()
             
-    #         flash('Appointment successful! We will contact you for confirmation as soon as possible.', 'success')
-    #         return redirect(url_for('expert_consultation'))
+            flash('Appointment successful! We will contact you for confirmation as soon as possible.', 'success')
+            return redirect(url_for('expert_consultation'))
             
-    #     except Exception as e:
-    #         flash('An error occurred. Please try again later.', 'error')
-    #         return redirect(url_for('expert_consultation'))
-    
-    @app.route('/book-visit-vnpay', methods=['POST'])
-    def book_visit_vnpay():
-        name = request.form['visit_name']
-        email = request.form['visit_email']
-        phone = request.form['visit_phone']
-        address = request.form['visit_address']
-        visit_date = request.form['visit_date']
-        visit_time = request.form['visit_time']
-        garden_size = request.form['garden_size']
-
-        order_id = 'VISIT' + datetime.now().strftime('%Y%m%d%H%M%S')
-        price_vnd = 500000  # VND trực tiếp
-
-        # Lưu visit, nhớ để notes=order_id để UPDATE được khi trả về
-        db = get_db()
-        db.execute(
-            "INSERT INTO visits (name, email, phone, address, visit_date, visit_time, garden_size, status, notes) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (name, email, phone, address, visit_date, visit_time, garden_size, 'pending', order_id)
-        )
-        db.commit()
-
-        order_desc = f"Home consultation {order_id} for {name}"
-        vnp_url = build_vnpay_url(
-            order_id=order_id,
-            amount_vnd=price_vnd,
-            order_desc=order_desc,
-            config=app.config,
-            user_ip=request.remote_addr
-        )
-        return redirect(vnp_url)
-
+        except Exception as e:
+            flash('An error occurred. Please try again later.', 'error')
+            return redirect(url_for('expert_consultation'))
+   
     # Route cho about
     @app.route('/about')
     def about():
@@ -364,72 +332,6 @@ def create_app():
     def expert_chat():
         # Ở đây bạn có thể render một trang chat chuyên gia, tạm thời render template demo
         return render_template('expert_chat.html')
-    
-    from .vnpay_utils import build_vnpay_url
-
-    @app.route('/checkout-vnpay')
-    def checkout_vnpay():
-        cart = session.get('cart', [])
-        if not cart:
-            flash('Cart is empty!', 'error')
-            return redirect(url_for('cart'))
-
-        # Tổng USD hiện đang lưu dạng "$xx.yy"
-        total_usd = sum(float(item['price'].replace('$', '')) * item['quantity'] for item in cart)
-
-        # Đổi sang VND 1 lần (cố định 25,000 hoặc nếu bạn có API thì dùng)
-        RATE = 25000
-        total_vnd = int(round(total_usd * RATE))
-
-        order_id = 'ORDER' + datetime.now().strftime('%Y%m%d%H%M%S')
-        # (Khuyến nghị) Lưu đơn hàng vào DB orders để đối chiếu khi return:
-        db = get_db()
-        db.execute("INSERT INTO orders (user_id, total, status) VALUES (?, ?, ?)",
-                (g.user['id'] if getattr(g, 'user', None) else None,
-                    total_usd,
-                    'pending'))
-        db.commit()
-
-        order_desc = f"Pay order {order_id}"
-        vnp_url = build_vnpay_url(
-            order_id=order_id,
-            amount_vnd=total_vnd,
-            order_desc=order_desc,
-            config=app.config,
-            user_ip=request.remote_addr
-        )
-        return redirect(vnp_url)
-        
-    @app.route('/vnpay_return')
-    def vnpay_return():
-        params = request.args.to_dict()
-        if not verify_vnpay_response(params, app.config):
-            flash('Invalid signature!', 'error')
-            return redirect(url_for('home'))
-
-        vnp_response_code = params.get('vnp_ResponseCode')
-        order_id = params.get('vnp_TxnRef')
-        db = get_db()
-
-        if order_id and order_id.startswith('VISIT'):
-            if vnp_response_code == '00':
-                db.execute("UPDATE visits SET status='paid' WHERE notes=?", (order_id,))
-                db.commit()
-                flash('Payment successful! Booking confirmed.', 'success')
-            else:
-                flash('Payment failed or canceled.', 'error')
-            return redirect(url_for('expert_consultation'))
-
-        if order_id and order_id.startswith('ORDER'):
-            if vnp_response_code == '00':
-                session['cart'] = []
-                flash('Order payment successful!', 'success')
-            else:
-                flash('Payment failed or canceled.', 'error')
-            return redirect(url_for('cart'))
-
-        flash('Order reference not recognized.', 'error')
-        return redirect(url_for('home'))
     
     from .plant_data import plants
 

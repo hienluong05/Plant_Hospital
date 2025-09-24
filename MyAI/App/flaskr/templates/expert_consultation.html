@@ -514,33 +514,33 @@
                 />
               </div>
               <div class="mb-3 col-md-6">
-                <label class="form-label">Số điện thoại</label>
+                <label class="form-label">Phone number</label>
                 <input type="tel" class="form-control" name="phone" />
               </div>
               <div class="mb-3 col-md-6">
-                <label class="form-label">Loại cây trồng *</label>
+                <label class="form-label">Type of plant *</label>
                 <select class="form-select" name="plant_type" required>
-                  <option value="">Chọn loại cây</option>
-                  <option value="rice">Lúa</option>
-                  <option value="corn">Ngô</option>
-                  <option value="tomato">Cà chua</option>
-                  <option value="potato">Khoai tây</option>
-                  <option value="other">Khác</option>
+                  <option value="">Select a type of plant</option>
+                  <option value="rice">Rice</option>
+                  <option value="corn">Corn</option>
+                  <option value="tomato">Tomato</option>
+                  <option value="potato">Potato</option>
+                  <option value="other">Others</option>
                 </select>
               </div>
               <div class="mb-3 col-md-12">
-                <label class="form-label">Mô tả chi tiết vấn đề *</label>
+                <label class="form-label">Describe your problems *</label>
                 <textarea
                   class="form-control"
                   name="question"
                   rows="4"
                   required
-                  placeholder="Triệu chứng, biểu hiện, thời điểm phát hiện..."
+                  placeholder="Symptoms, manifestations, time of detection..."
                 ></textarea>
               </div>
               <div class="mb-3 col-md-12">
                 <label class="form-label"
-                  >Hình ảnh cây bệnh (tối đa 5 ảnh)</label
+                  >Diseased plants image (maximum 5 images)</label
                 >
                 <input
                   type="file"
@@ -557,10 +557,10 @@
                 class="btn btn-outline-secondary"
                 data-bs-dismiss="modal"
               >
-                Hủy
+                Cancel
               </button>
               <button type="submit" class="btn btn-success">
-                <i class="fas fa-paper-plane"></i> Gửi câu hỏi
+                <i class="fas fa-paper-plane"></i> Send
               </button>
             </div>
           </form>
@@ -577,7 +577,7 @@
     >
       <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-          <form action="{{ url_for('book_visit_vnpay') }}" method="POST">
+          <form action="{{ url_for('book_visit') }}" method="POST">
             <div class="modal-header">
               <h5 class="modal-title" id="modalVLabel">
                 <i class="fas fa-user-md"></i> Đặt lịch tư vấn tại nhà
