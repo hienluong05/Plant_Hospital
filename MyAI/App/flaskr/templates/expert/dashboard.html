@@ -254,7 +254,9 @@
           <a href="{{ url_for('home') }}"
             ><i class="fas fa-calendar-alt"></i> Home Visits</a
           >
-          <a href="#"><i class="fas fa-comments"></i> Chat with Users</a>
+          <a href="{{ url_for('expert.chat_sessions') }}"
+            ><i class="fas fa-comments"></i> Chat with Users</a
+          >
           <a href="#"><i class="fas fa-user"></i> Profile</a>
         </nav>
         <div class="sidebar-footer">&copy; 2025 Plant Hospital</div>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat Detail - Expert | Plant Hospital</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(120deg, #e3f2fd 0%, #e8f5e9 100%);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        color: #333;
+      }
+      .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 260px;
+        background: linear-gradient(
+          135deg,
+          #257c36 0%,
+          #388e3c 50%,
+          #1976d2 100%
+        );
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        padding: 28px 0;
+        box-shadow: 2px 0 18px #2196f322;
+      }
+      .sidebar .logo {
+        font-size: 1.7rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 36px;
+        letter-spacing: 1px;
+        color: #fff;
+      }
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+      .sidebar a {
+        color: #fff;
+        text-decoration: none;
+        padding: 13px 36px;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        border-left: 4px solid transparent;
+        transition: background 0.18s, border 0.18s, color 0.18s;
+      }
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: #fff;
+        color: #1976d2;
+        border-left: 4px solid #ff9800;
+        font-weight: 600;
+      }
+      .sidebar .sidebar-footer {
+        margin-top: auto;
+        text-align: center;
+        font-size: 0.95rem;
+        color: #eee;
+        padding: 20px 0 0 0;
+      }
+      .main-content {
+        flex: 1;
+        padding: 38px 5vw 0 5vw;
+        background: linear-gradient(120deg, #fffde7 0%, #f8fff8 100%);
+        min-height: 100vh;
+      }
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 38px;
+      }
+      .dashboard-header .welcome {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #388e3c;
+      }
+      .dashboard-header .logout-btn {
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 23px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        text-decoration: none;
+      }
+      .dashboard-header .logout-btn:hover {
+        background: #e68900;
+      }
+      .chat-info {
+        background: #e3f2fd;
+        border-radius: 12px;
+        padding: 13px 20px;
+        margin-bottom: 18px;
+        color: #1976d2;
+        font-size: 1.03rem;
+        font-weight: 500;
+      }
+      .chat-history {
+        background: #fff;
+        border-radius: 17px;
+        box-shadow: 0 5px 32px #2196f311;
+        padding: 24px 18px;
+        max-height: 450px;
+        overflow-y: auto;
+        margin-bottom: 18px;
+      }
+      .msg-row {
+        margin-bottom: 16px;
+        display: flex;
+        align-items: flex-end;
+      }
+      .msg-bubble {
+        padding: 11px 18px;
+        border-radius: 15px;
+        font-size: 1.07rem;
+        max-width: 65%;
+      }
+      .msg-expert {
+        background: #e8f5e9;
+        color: #388e3c;
+        margin-left: auto;
+      }
+      .msg-user {
+        background: #e3f2fd;
+        color: #1976d2;
+        margin-right: auto;
+      }
+      .msg-meta {
+        font-size: 0.92rem;
+        color: #888;
+        margin-top: 3px;
+      }
+      .chat-send-form {
+        display: flex;
+        gap: 13px;
+        margin-top: 13px;
+      }
+      .chat-send-form textarea {
+        flex: 1;
+        border-radius: 9px;
+        border: 1.5px solid #cfd8dc;
+        font-size: 1.07rem;
+        background: #f8fff8;
+        padding: 12px;
+        resize: none;
+      }
+      .chat-send-form button {
+        background: #388e3c;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 11px 34px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background 0.18s;
+      }
+      .chat-send-form button:hover {
+        background: #1976d2;
+      }
+      .btn-back {
+        background: #888;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 27px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-left: 13px;
+        text-decoration: none;
+      }
+      @media (max-width: 900px) {
+        .dashboard-container {
+          flex-direction: column;
+        }
+        .sidebar {
+          flex-direction: row;
+          width: 100%;
+          height: auto;
+          padding: 10px 0;
+          justify-content: flex-start;
+        }
+        .sidebar nav {
+          flex-direction: row;
+          gap: 0;
+        }
+        .sidebar a {
+          padding: 10px 15px;
+          border-left: none;
+          border-bottom: 3px solid transparent;
+        }
+        .sidebar a.active,
+        .sidebar a:hover {
+          border-bottom: 3px solid #ff9800;
+          border-left: none;
+        }
+        .main-content {
+          padding: 18px 2vw 0 2vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="logo"><i class="fas fa-user-md"></i> Expert Panel</div>
+        <nav>
+          <a href="{{ url_for('expert_dashboard') }}"
+            ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+          >
+          <a href="{{ url_for('expert.questions') }}"
+            ><i class="fas fa-question-circle"></i> Q&A Management</a
+          >
+          <a href="{{ url_for('expert.chat_sessions') }}" class="active"
+            ><i class="fas fa-comments"></i> Chat Sessions</a
+          >
+          <a href="#"><i class="fas fa-calendar-alt"></i> Home Visits</a>
+          <a href="#"><i class="fas fa-user"></i> Profile</a>
+        </nav>
+        <div class="sidebar-footer">&copy; 2025 Plant Hospital</div>
+      </aside>
+      <main class="main-content">
+        <div class="dashboard-header">
+          <div class="welcome">
+            <i class="fas fa-comments"></i> Chat with {{ session.username }}
+            (User: {{ session.username }})
+          </div>
+          <a href="{{ url_for('auth.logout') }}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </div>
+        <div class="chat-info">
+          <i class="fas fa-user"></i> User:
+          <strong>{{ session.username }}</strong> | Email: {{ session.email
+          }}<br />
+          <i class="fas fa-clock"></i> Started: {{ session.started_at }} |
+          Status: {{ session.status.capitalize() }}
+        </div>
+        <div class="chat-history" id="chat-history">
+          {% for msg in messages %}
+          <div class="msg-row">
+            <div
+              class="msg-bubble {% if msg.sender_type == 'expert' %}msg-expert{% else %}msg-user{% endif %}"
+            >
+              <strong>{{ msg.sender_name }}</strong><br />
+              {{ msg.content }}
+              <div class="msg-meta">{{ msg.timestamp }}</div>
+            </div>
+          </div>
+          {% else %}
+          <div style="color: #888">No messages yet.</div>
+          {% endfor %}
+        </div>
+        <form method="post" class="chat-send-form">
+          <textarea
+            name="message"
+            placeholder="Type your reply..."
+            required
+            rows="2"
+          ></textarea>
+          <button type="submit"><i class="fas fa-paper-plane"></i> Send</button>
+          <a href="{{ url_for('expert.chat_sessions') }}" class="btn-back"
+            >Back</a
+          >
+        </form>
+      </main>
+    </div>
+    <script>
+      // Tự động cuộn xuống dưới cùng khi load trang
+      const chatHistory = document.getElementById("chat-history");
+      if (chatHistory) chatHistory.scrollTop = chatHistory.scrollHeight;
+    </script>
+  </body>
+</html>
