@@ -98,3 +98,35 @@ def order_detail(order_id):
     order = db.execute('SELECT * FROM orders WHERE id=?', (order_id,)).fetchone()
     items = db.execute('SELECT * FROM order_items WHERE order_id=?', (order_id,)).fetchall()
     return render_template('admin/order_detail.html', order=order, items=items)
+
+@bp.route('/consultations')
+@admin_required
+def consultations():
+    db = get_db()
+    sessions = db.execute('''
+        SELECT chat_session.*, user.username as user_name, experts.name as expert_name
+        FROM chat_session
+        LEFT JOIN user ON chat_session.user_id = user.id
+        LEFT JOIN experts ON chat_session.expert_id = experts.id
+        ORDER BY chat_session.started_at DESC
+    ''').fetchall()
+    return render_template('admin/consultations.html', sessions=sessions)
+
+@bp.route('/consultations/<int:session_id>')
+@admin_required
+def consultation_detail(session_id):
+    db = get_db()
+    session_row = db.execute(
+        '''SELECT chat_session.*, user.username as user_name, experts.name as expert_name
+           FROM chat_session
+           LEFT JOIN user ON chat_session.user_id = user.id
+           LEFT JOIN experts ON chat_session.expert_id = experts.id
+           WHERE chat_session.id=?''', (session_id,)
+    ).fetchone()
+    if not session_row:
+        flash('Session not found.', 'error')
+        return redirect(url_for('admin.consultations'))
+    messages = db.execute(
+        '''SELECT * FROM chat_message WHERE session_id=? ORDER BY timestamp ASC''', (session_id,)
+    ).fetchall()
+    return render_template('admin/consultation_detail.html', session=session_row, messages=messages)

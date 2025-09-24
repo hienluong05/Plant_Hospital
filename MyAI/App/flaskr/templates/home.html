@@ -523,6 +523,15 @@
         <div class="top-right">
           {% if g.user %}
           <span class="user-welcome">Welcome, {{ g.user.username }}!</span>
+          {% if g.user.id == 1 %}
+          <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="top-btn"
+            style="background: #388e3c; color: #fff"
+          >
+            <i class="fas fa-cogs"></i> Admin Dashboard
+          </a>
+          {% endif %}
           <a href="{{ url_for('auth.logout') }}" class="top-btn"
             ><i class="fas fa-sign-out-alt"></i> Log Out</a
           >
