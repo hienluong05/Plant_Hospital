@@ -118,6 +118,19 @@
         color: #4caf50;
         text-decoration: underline;
       }
+      .you-are-expert {
+        text-align: center;
+        margin-top: 15px;
+      }
+      .you-are-expert a {
+        color: #666;
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .you-are-expert a:hover {
+        color: #4caf50;
+        text-decoration: underline;
+      }
       .alert {
         padding: 10px;
         margin-bottom: 15px;
@@ -209,6 +222,10 @@
 
           <div class="forgot-password">
             <a href="#">Forgot Password?</a>
+          </div>
+
+          <div class="you-are-expert">
+            <a href="{{ url_for('auth.login_expert')}}">You are expert?</a>
           </div>
 
           <div class="form-footer">
