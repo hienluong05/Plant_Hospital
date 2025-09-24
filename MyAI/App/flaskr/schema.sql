@@ -130,3 +130,16 @@ CREATE TABLE IF NOT EXISTS payments (
   method TEXT, -- paypal, vnpay...
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Bảng sản phẩm cho pharmacy
+CREATE TABLE IF NOT EXISTS products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    category TEXT,
+    price REAL NOT NULL,
+    stock INTEGER DEFAULT 0,
+    description TEXT,
+    icon TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

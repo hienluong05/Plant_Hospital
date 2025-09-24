@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order #{{ order['id'] }} | Plant Hospital Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg, #e8f5e9 0%, #a2c5f4 100%);
+        color: #263238;
+        margin: 0;
+        min-height: 100vh;
+      }
+      .admin-header {
+        background: #fff;
+        padding: 0 4vw;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 16px #4caf5012;
+      }
+      .admin-header .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #388e3c;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-header .logo i {
+        color: #ff9800;
+        font-size: 2.1rem;
+      }
+      .nav-menu {
+        display: flex;
+        gap: 23px;
+        align-items: center;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #388e3c;
+        font-size: 1.07rem;
+        font-weight: 600;
+        padding: 7px 18px;
+        border-radius: 12px;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-menu a.active,
+      .nav-menu a:hover {
+        background: #e8f5e9;
+        color: #ff9800;
+      }
+      .admin-header .logout-btn {
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 30px;
+        font-weight: 600;
+        font-size: 1.01rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-left: 14px;
+      }
+      .admin-header .logout-btn:hover {
+        background: #e68900;
+      }
+      .admin-main {
+        max-width: 700px;
+        margin: 48px auto 0 auto;
+        padding: 0 2vw 36px 2vw;
+      }
+      .order-title {
+        font-size: 2rem;
+        color: #388e3c;
+        font-weight: 800;
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .order-detail-card {
+        background: #fff;
+        border-radius: 22px;
+        box-shadow: 0 5px 28px #4caf501b;
+        padding: 34px 30px 30px 30px;
+        margin-bottom: 38px;
+      }
+      .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+      .order-info-label {
+        color: #388e3c;
+        font-weight: 700;
+      }
+      .order-info-value {
+        color: #263238;
+        font-weight: 600;
+      }
+      .status-badge {
+        display: inline-block;
+        border-radius: 10px;
+        font-size: 0.98rem;
+        font-weight: 700;
+        padding: 7px 18px;
+      }
+      .status-badge.pending {
+        background: #ffe0b2;
+        color: #ff9800;
+      }
+      .status-badge.paid {
+        background: #e8f5e9;
+        color: #388e3c;
+      }
+      .status-badge.cancelled {
+        background: #ffcdd2;
+        color: #d32f2f;
+      }
+      .items-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        font-size: 1.03rem;
+        margin-top: 18px;
+      }
+      .items-table th,
+      .items-table td {
+        padding: 11px 10px;
+        text-align: left;
+      }
+      .items-table th {
+        background: #e8f5e9;
+        color: #388e3c;
+        font-weight: 700;
+        border-radius: 7px 7px 0 0;
+      }
+      .items-table td {
+        background: #fff;
+        border-radius: 7px;
+      }
+      .footer {
+        margin-top: 60px;
+        color: #888;
+        text-align: center;
+        font-size: 1.04rem;
+        opacity: 0.96;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 22px;
+        color: #388e3c;
+        font-weight: 600;
+        text-decoration: underline;
+      }
+      .back-link:hover {
+        color: #1976d2;
+      }
+      @media (max-width: 600px) {
+        .admin-header {
+          flex-direction: column;
+          gap: 10px;
+          height: auto;
+          padding: 8px 0;
+        }
+        .admin-main {
+          padding: 0 1vw;
+        }
+        .order-title {
+          font-size: 1.1rem;
+          gap: 6px;
+        }
+        .order-detail-card {
+          padding: 10px 2vw 14px 2vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="logo">
+        <i class="fas fa-seedling"></i> Plant Hospital Admin
+      </div>
+      <nav class="nav-menu">
+        <a href="{{ url_for('admin.dashboard') }}"
+          ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+        >
+        <a href="{{ url_for('admin.products') }}"
+          ><i class="fas fa-pills"></i> Products</a
+        >
+        <a href="{{ url_for('admin.orders') }}" class="active"
+          ><i class="fas fa-receipt"></i> Orders</a
+        >
+      </nav>
+      <a href="{{ url_for('auth.logout') }}" class="logout-btn"
+        ><i class="fas fa-sign-out-alt"></i> Logout</a
+      >
+    </header>
+    <main class="admin-main">
+      <div class="order-title">
+        <i class="fas fa-receipt"></i> Order #{{ order['id'] }}
+      </div>
+      <div class="order-detail-card">
+        <div class="order-info-row">
+          <div>
+            <span class="order-info-label">Order ID:</span>
+            <span class="order-info-value">{{ order['id'] }}</span>
+          </div>
+          <div>
+            <span class="order-info-label">User ID:</span>
+            <span class="order-info-value">{{ order['user_id'] }}</span>
+          </div>
+        </div>
+        <div class="order-info-row">
+          <div>
+            <span class="order-info-label">Total:</span>
+            <span class="order-info-value"
+              >${{ '%.2f' % (order['total'] or 0) }}</span
+            >
+          </div>
+          <div>
+            <span class="order-info-label">Status:</span>
+            <span class="status-badge {{ order['status']|lower }}"
+              >{{ order['status'].capitalize() }}</span
+            >
+          </div>
+        </div>
+        <div class="order-info-row">
+          <div>
+            <span class="order-info-label">Created:</span>
+            <span class="order-info-value">{{ order['created_at'] }}</span>
+          </div>
+        </div>
+        <h3 style="color: #388e3c; font-size: 1.13rem; margin-top: 32px">
+          Order Items
+        </h3>
+        <table class="items-table">
+          <tr>
+            <th style="width: 40%">Product</th>
+            <th style="width: 19%">Price</th>
+            <th style="width: 12%">Quantity</th>
+            <th style="width: 19%">Subtotal</th>
+          </tr>
+          {% for item in items %}
+          <tr>
+            <td>{{ item['product_name'] }}</td>
+            <td>${{ '%.2f' % (item['price'] or 0) }}</td>
+            <td>{{ item['quantity'] }}</td>
+            <td>
+              ${{ '%.2f' % ((item['price'] or 0) * (item['quantity'] or 0)) }}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" style="text-align: center; color: #aaa">
+              No items in order.
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        <a href="{{ url_for('admin.orders') }}" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Orders</a
+        >
+      </div>
+      <div class="footer">&copy; 2025 Plant Hospital. All rights reserved.</div>
+    </main>
+  </body>
+</html>

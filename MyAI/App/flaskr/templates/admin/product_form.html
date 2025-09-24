@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      {% if product %}Edit Product{% else %}Add Product{% endif %} | Plant
+      Hospital Admin
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg, #e8f5e9 0%, #a2c5f4 100%);
+        color: #263238;
+        margin: 0;
+        min-height: 100vh;
+      }
+      .admin-header {
+        background: #fff;
+        padding: 0 4vw;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 16px #4caf5012;
+      }
+      .admin-header .logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #388e3c;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-header .logo i {
+        color: #ff9800;
+        font-size: 2.1rem;
+      }
+      .nav-menu {
+        display: flex;
+        gap: 23px;
+        align-items: center;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #388e3c;
+        font-size: 1.07rem;
+        font-weight: 600;
+        padding: 7px 18px;
+        border-radius: 12px;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-menu a.active,
+      .nav-menu a:hover {
+        background: #e8f5e9;
+        color: #ff9800;
+      }
+      .admin-header .logout-btn {
+        background: #ff9800;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 30px;
+        font-weight: 600;
+        font-size: 1.01rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-left: 14px;
+      }
+      .admin-header .logout-btn:hover {
+        background: #e68900;
+      }
+      .admin-main {
+        max-width: 520px;
+        margin: 48px auto 0 auto;
+        padding: 0 2vw 36px 2vw;
+      }
+      .form-title {
+        font-size: 2rem;
+        color: #388e3c;
+        font-weight: 800;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .form-card {
+        background: #fff;
+        border-radius: 22px;
+        box-shadow: 0 5px 28px #4caf501b;
+        padding: 34px 30px 30px 30px;
+        margin-bottom: 38px;
+      }
+      .form-group {
+        margin-bottom: 22px;
+      }
+      .form-group label {
+        font-weight: 600;
+        color: #4caf50;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 1.08rem;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border-radius: 12px;
+        border: 2px solid #cfd8dc;
+        font-size: 1.09rem;
+        background: #fafbfc;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+        box-sizing: border-box;
+      }
+      .form-group textarea {
+        min-height: 85px;
+        max-height: 300px;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-color: #4caf50;
+        background: #fff;
+        box-shadow: 0 0 0 2px #4caf5020;
+      }
+      .btn-save {
+        background: linear-gradient(90deg, #4caf50 80%, #ff9800 100%);
+        color: white;
+        border: none;
+        padding: 14px 0;
+        border-radius: 13px;
+        font-weight: 700;
+        font-size: 1.12rem;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        box-shadow: 0 2px 9px #4caf5011;
+        transition: background 0.18s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .btn-save:hover {
+        background: linear-gradient(90deg, #43a047 80%, #fb8c00 100%);
+      }
+      .form-footer {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .form-footer a {
+        color: #388e3c;
+        text-decoration: underline;
+        font-size: 1.07rem;
+      }
+      .form-footer a:hover {
+        color: #1976d2;
+      }
+      @media (max-width: 600px) {
+        .admin-header {
+          flex-direction: column;
+          gap: 10px;
+          height: auto;
+          padding: 8px 0;
+        }
+        .admin-main {
+          padding: 0 1vw;
+        }
+        .form-title {
+          font-size: 1.1rem;
+          gap: 6px;
+        }
+        .form-card {
+          padding: 10px 2vw 14px 2vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="logo">
+        <i class="fas fa-seedling"></i> Plant Hospital Admin
+      </div>
+      <nav class="nav-menu">
+        <a href="{{ url_for('admin.dashboard') }}"
+          ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+        >
+        <a href="{{ url_for('admin.products') }}" class="active"
+          ><i class="fas fa-pills"></i> Products</a
+        >
+        <a href="{{ url_for('admin.orders') }}"
+          ><i class="fas fa-receipt"></i> Orders</a
+        >
+      </nav>
+      <a href="{{ url_for('auth.logout') }}" class="logout-btn"
+        ><i class="fas fa-sign-out-alt"></i> Logout</a
+      >
+    </header>
+    <main class="admin-main">
+      <div class="form-title">
+        <i class="fas fa-pills"></i> {% if product %}Edit Product{% else %}Add
+        Product{% endif %}
+      </div>
+      <div class="form-card">
+        <form method="POST">
+          <div class="form-group">
+            <label>Name *</label>
+            <input
+              name="name"
+              value="{{ product['name'] if product else '' }}"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <input
+              name="category"
+              value="{{ product['category'] if product else '' }}"
+            />
+          </div>
+          <div class="form-group">
+            <label>Price *</label>
+            <input
+              name="price"
+              type="number"
+              step="0.01"
+              value="{{ product['price'] if product else '' }}"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input
+              name="stock"
+              type="number"
+              value="{{ product['stock'] if product else 0 }}"
+            />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea name="description">
+{{ product['description'] if product else '' }}</textarea
+            >
+          </div>
+          <div class="form-group">
+            <label
+              >Icon (FontAwesome class, e.g. fa-pills, fa-leaf,
+              fa-shield-alt...)</label
+            >
+            <input
+              name="icon"
+              value="{{ product['icon'] if product else '' }}"
+            />
+          </div>
+          <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i> {% if product %}Save Changes{% else
+            %}Add Product{% endif %}
+          </button>
+        </form>
+        <div class="form-footer">
+          <a href="{{ url_for('admin.products') }}"
+            ><i class="fas fa-arrow-left"></i> Back to Products</a
+          >
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

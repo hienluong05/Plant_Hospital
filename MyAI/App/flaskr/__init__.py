@@ -134,9 +134,13 @@ def create_app():
     from . import blog
     app.register_blueprint(blog.bp)
     
-    # Đnawg ký blueprint expert
+    # Đăng ký blueprint expert
     from . import expert
     app.register_blueprint(expert.bp)
+    
+    # Đăng ký blueprint admin
+    from . import admin
+    app.register_blueprint(admin.bp)
 
     # Helper function để get database
     def get_db():
