@@ -78,7 +78,7 @@
    ```
 
 6. **Access the app:**  
-   Open [http://localhost:5000](http://localhost:5000) in your browser.
+   Open [http://127.1.0.0:5000](http://127.1.0.0:5000) in your browser.
 
 ---
 
