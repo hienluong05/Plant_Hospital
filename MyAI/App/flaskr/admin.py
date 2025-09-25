@@ -99,6 +99,17 @@ def order_detail(order_id):
     items = db.execute('SELECT * FROM order_items WHERE order_id=?', (order_id,)).fetchall()
     return render_template('admin/order_detail.html', order=order, items=items)
 
+@bp.route('/orders/delete/<int:order_id>', methods=['POST'])
+@admin_required
+def delete_order(order_id):
+    db = get_db()
+    # Xóa order_items trước để tránh lỗi foreign key
+    db.execute('DELETE FROM order_items WHERE order_id=?', (order_id,))
+    db.execute('DELETE FROM orders WHERE id=?', (order_id,))
+    db.commit()
+    flash('Order deleted.', 'success')
+    return redirect(url_for('admin.orders'))
+
 @bp.route('/consultations')
 @admin_required
 def consultations():

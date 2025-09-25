@@ -10,7 +10,7 @@ def init_socketio(app):
     socketio = SocketIO(app)
 
     @socketio.on('join_chat')
-    def handle_join_chat():
+    def handle_join_chat(data):
         user_id = session.get('user_id')
         expert_id = None
         if not user_id:

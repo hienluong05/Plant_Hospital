@@ -238,12 +238,11 @@
         <div class="cart-summary">
           <span class="cart-total-label">Total:</span>
           <span class="cart-total-price">${{ '%.2f' % total }}</span><br />
-          <button
-            class="cart-checkout-btn"
-            onclick="window.location.href='/checkout-paypal'"
-          >
-            <i class="fas fa-credit-card"></i> Pay
-          </button>
+          <form method="POST" action="/checkout" style="display: inline">
+            <button class="cart-checkout-btn" type="submit">
+              <i class="fas fa-credit-card"></i> Pay
+            </button>
+          </form>
         </div>
         {% else %}
         <div class="cart-empty">

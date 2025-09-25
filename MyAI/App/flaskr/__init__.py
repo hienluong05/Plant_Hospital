@@ -377,6 +377,41 @@ def create_app():
             "rating": rating,
         }
         return render_template('expert/dashboard.html', expert_name=expert_name, stats=stats)
+    
+    @app.route('/checkout', methods=['POST'])
+    def checkout():
+        if g.user is None:
+            return redirect(url_for('auth.login'))  # Bắt user đăng nhập
+
+        cart = session.get('cart', [])
+        if not cart:
+            flash('Your cart is empty!', 'error')
+            return redirect(url_for('cart'))
+
+        total = sum(float(item['price'].replace('$','')) * item['quantity'] for item in cart)
+        db = get_db()
+        user_id = g.user['id']
+
+        # Thêm vào bảng orders
+        cursor = db.execute(
+            'INSERT INTO orders (user_id, total, status) VALUES (?, ?, ?)',
+            (user_id, total, 'pending')
+        )
+        order_id = cursor.lastrowid
+
+        # Thêm từng sản phẩm vào order_items
+        for item in cart:
+            db.execute(
+                'INSERT INTO order_items (order_id, product_name, price, quantity) VALUES (?, ?, ?, ?)',
+                (order_id, item['name'], float(item['price'].replace('$','')), item['quantity'])
+            )
+        db.commit()
+
+        # Xóa cart khỏi session
+        session['cart'] = []
+
+        flash('Order placed successfully!', 'success')
+        return redirect(url_for('cart'))
 
     return app
 
