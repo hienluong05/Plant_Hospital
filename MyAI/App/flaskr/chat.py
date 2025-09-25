@@ -54,7 +54,7 @@ def init_socketio(app):
                     'content': m['content'],
                     'sender_type': m['sender_type'],
                     'sender_name': m['sender_name'],
-                    'timestamp': m['timestamp'],
+                    'timestamp': m['timestamp'].strftime('%Y-%m-%d %H:%M:%S') if m['timestamp'] else ''
                 } for m in messages
             ]
         emit('chat_history', messages)
